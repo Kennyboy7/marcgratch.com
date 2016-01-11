@@ -563,4 +563,10 @@
 	$.each(statusi, function(){
 		$( 'select[name=\"_status\"]' ).append( '<option value="'+this.slug+'">'+this.label+'</option>' );
 	});
+
+
 })(jQuery);
+
+jQuery( document.body ).on( 'post-load', function () {
+	console.log('loaded');
+} );

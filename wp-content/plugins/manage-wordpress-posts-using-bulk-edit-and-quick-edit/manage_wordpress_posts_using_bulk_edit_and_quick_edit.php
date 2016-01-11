@@ -1297,6 +1297,11 @@ function posts_filter_act_events($query) {
 	}
 }
 
+/**
+ * Check if the passed value is not false, 0, null or empty.
+ * @param $input
+ * @return bool
+ */
 function check_for_value( $input ){
     if (is_array($input)){
 		$input = array_values($input);
@@ -1329,6 +1334,11 @@ function check_for_value( $input ){
     }
 }
 
+
+/**
+ * This function updates the project drop down on edit.php for mg_tasks
+ * @todo Add support for bulk edit, disabled when multiple project tasks are selected.
+ */
 function process_ajax_get_tasks_per_project(){
 	$has_admin = array();
 	//@TODO ADD NONCE CHECK
@@ -1350,7 +1360,7 @@ function process_ajax_get_tasks_per_project(){
 		'post_type'		=> 'mg_task',
 		'meta_key'   	=> 'project',
 		'meta_value'	=> $project_id,
-		'post_status'   => array('complete','in-progress','not-started','publish','published'),
+		'post_status'   => array('complete','in-progress','not-started','publish','published','testing'),
 		'posts_per_page' => -1
 	);
 

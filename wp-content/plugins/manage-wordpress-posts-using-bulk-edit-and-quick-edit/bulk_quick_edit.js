@@ -480,7 +480,6 @@
 	$.each(params, function(){
 		var param_item = this.split("=");
 		if (param_item.indexOf("project") > -1 && 'undefined' !== typeof param_item[1] && 'project' === param_item[0]){
-			console.log(param_item);
 			param_list[param_item[0]] = param_item[1];
 		}
 	});
@@ -497,9 +496,7 @@
 		self.response = $.post( ajaxurl, data );
 
 		$.when( self.response ).done(function( response ){
-			console.log(response);
 			self.response = JSON.parse(response);
-			console.log(self.response.tasks);
 			self.updatedTasks= self.response.tasks;
 		});
 		$.when( self.response ).fail( function( response ){
@@ -518,23 +515,12 @@
 			var tasks_select = $('select[name="post_parent"]');
 		}
 
-		console.log("fire");
 		var supplied_options = [];
-		var updated_options = [];
-		//tasks_select.empty();
-		//$( '<option value="0">-- No Primary Task --</option>').appendTo(tasks_select);
 		$.each( tasks_select.find("option") , function(){
 			supplied_options.push(parseInt($(this).val()));
 		});
-		console.log(supplied_options);
-		console.log('break');
-		console.log(this);
-		console.log('break');
-		console.log(tasks);
 		$.grep(supplied_options, function(el) {
-			console.log(el);
 			if ($.inArray(el, tasks) == -1){
-				console.log("fire again");
 				tasks_select.find("option[value='"+el+"']").remove();
 			}
 		});

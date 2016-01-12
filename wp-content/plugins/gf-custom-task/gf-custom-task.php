@@ -200,7 +200,7 @@ function populate_pods_dropdown( $form ) {
 				$args = array(
 					'post_type' => 'mg_task',
 					'posts_per_page' => -1,
-					'post_status' => array('complete','in-progress','not-started','publish','published'),
+					'post_status' => array('complete','in-progress','not-started','testing','publish','published'),
 					'meta_key'	=> 'project',
 					'meta_value'	=> $project_id
 				);
@@ -209,7 +209,7 @@ function populate_pods_dropdown( $form ) {
 				$args = array(
 					'post_type' => 'mg_task',
 					'posts_per_page' => -1,
-					'post_status' => array('complete','in-progress','not-started','publish','published'),
+					'post_status' => array('complete','in-progress','not-started','testing','publish','published'),
 				);
 			}
 
@@ -242,7 +242,7 @@ function populate_pods_dropdown( $form ) {
 				$args = array(
 					'post_type' => 'mg_task',
 					'posts_per_page' => -1,
-					'post_status' => array('complete','in-progress','not-started','publish','published'),
+					'post_status' => array('complete','in-progress','not-started','testing','publish','published'),
 					'meta_key'	=> 'project',
 					'meta_value'	=> $project_id
 				);
@@ -251,7 +251,7 @@ function populate_pods_dropdown( $form ) {
 				$args = array(
 					'post_type' => 'mg_task',
 					'posts_per_page' => -1,
-					'post_status' => array('complete','in-progress','not-started','publish','published'),
+					'post_status' => array('complete','in-progress','not-started','testing','publish','published'),
 				);
 			}
 
@@ -598,15 +598,16 @@ function process_ajax_on_project_change(){
 		'post_type'		=> 'mg_task',
 		'meta_key'   	=> 'project',
 		'meta_value'	=> $post_id,
-		'post_status' => array('complete','in-progress','not-started','publish','published'),
+		'post_status' => array('complete','in-progress','not-started','testing','publish','published'),
+		'posts_per_page'	=> -1
 	);
 
 	$the_query = new WP_Query( $args );
 	while ( $the_query->have_posts() ) {
 		$the_query->the_post();
 		$asscoiativeTasks[] = array(
-			'task_title' => get_the_title(),
-			'task_id'	 => get_the_ID()
+			'task_title' 	=> get_the_title(),
+			'task_id'	 	=> get_the_ID(),
 		);
 	}
 

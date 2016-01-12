@@ -93,22 +93,22 @@
                                     
                         the_widget( 'WP_Widget_Archives','',
                         
-                        array(  'before_widget' => '<div id="%1$s" class="post-article widget-box %2$s">',
+                        array(  'before_widget' => '<div class="post-article widget-box">',
                                 'after_widget'  => '</div>',
                                 'before_title'  => '<div class="title-container"><h3 class="title">',
                                 'after_title'   => '</h3></div>'
                         ));
                 
                         the_widget( 'WP_Widget_Calendar',
-                        array("title"=> __('Calendar',"diarjolite")),
-                        array(  'before_widget' => '<div id="%1$s" class="post-article widget-box %2$s">',
+                        array("title"=> __('Calendar',"jaxlite")),
+                        array(  'before_widget' => '<div class="post-article widget-box">',
                                 'after_widget'  => '</div>',
                                 'before_title'  => '<div class="title-container"><h3 class="title">',
                                 'after_title'   => '</h3></div>'
                         ));
                 
                         the_widget( 'WP_Widget_Categories','',
-                        array(  'before_widget' => '<div id="%1$s" class="post-article widget-box %2$s">',
+                        array(  'before_widget' => '<div class="post-article widget-box">',
                                 'after_widget'  => '</div>',
                                 'before_title'  => '<div class="title-container"><h3 class="title">',
                                 'after_title'   => '</h3></div>'

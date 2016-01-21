@@ -5,8 +5,8 @@ Plugin URI: http://aesopstoryengine.com
 Donate link: http://aesopstoryengine.com/donate
 Tags: aesop, story, business, education, parallax, interactive, shortcode, gallery, grid gallery, thumbnail gallery,
 Requires at least: 3.8
-Tested up to: 4.4
-Stable tag: 1.6.9
+Tested up to: 4.4.1
+Stable tag: 1.6.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,7 @@ Aesop Story Engine is a suite of open-sourced tools and components that empower 
 
 **Try Aesop for Free** - [http://tryaesop.com](http://tryaesop.com)
 
-Utilizing these components, writers can can take their work to the next level, and developers can utilize the core storytelling engine to build feature-rich, visually compelling WordPress themes. Here’s a demo theme incorporating these story components.
+Utilizing these components, writers can take their work to the next level, and developers can utilize the core storytelling engine to build feature-rich, visually compelling WordPress themes. Here’s a demo theme incorporating these story components.
 [http://playground.aesopstories.com](http://playground.aesopstories.com)
 
 **Audio** -
@@ -168,6 +168,16 @@ Full documentation can be found here: [http://aesopstoryengine.com/developers](h
 * Initial Release
 
 == Changelog ==
+
+= 1.6.11 =
+* FIX - Fixed the Chapter and Timeline navigation for non Aesop themes
+* FIX - Adjusted the Content Box
+* NEW - Added the background speed option for the Parallax component 
+
+= 1.6.10 =
+* FIX - Fixed the Video and Video Chapter visibility issues
+* FIX - Fixed the incorrect video source menu item.
+* FIX - Use the Character default style if the theme doesn't supply custom styles.  
 
 = 1.6.9 =
 * FIX - Fixed a check in error in 1.6.8

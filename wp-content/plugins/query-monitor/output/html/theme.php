@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 			return;
 		}
 
-		$child_theme = ( $data['stylesheet'] != $data['template'] );
+		$child_theme = ( $data['stylesheet'] !== $data['template'] );
 
 		echo '<div class="qm qm-half" id="' . esc_attr( $this->collector->id() ) . '">';
 		echo '<table cellspacing="0">';
@@ -40,7 +40,7 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 			echo '<tr>';
 			echo '<td>' . esc_html__( 'Template File', 'query-monitor' ) . '</td>';
 			if ( $child_theme ) {
-				echo '<td>' . self::output_filename( $data['theme_template'], $data['template_path'] ) . '</td>'; // WPCS: XSS ok.
+				echo '<td>' . self::output_filename( $data['theme_template_file'], $data['template_path'] ) . '</td>'; // WPCS: XSS ok.
 			} else {
 				echo '<td>' . self::output_filename( $data['template_file'], $data['template_path'] ) . '</td>'; // WPCS: XSS ok.
 			}

@@ -11,7 +11,8 @@ if ( ! defined( 'SI_FREE_TEST' ) ) {
 	define( 'SI_FREE_TEST', false ); }
 
 if ( ! defined( 'SI_DEV' ) ) {
-	define( 'SI_DEV', false ); }
+	define( 'SI_DEV', false );
+}
 
 abstract class Sprout_Invoices {
 
@@ -31,7 +32,7 @@ abstract class Sprout_Invoices {
 	/**
 	 * Current version. Should match sprout-invoices.php plugin version.
 	 */
-	const SI_VERSION = '9.3';
+	const SI_VERSION = '10.0.7';
 	/**
 	 * DB Version
 	 */

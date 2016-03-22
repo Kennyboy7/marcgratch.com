@@ -55,22 +55,21 @@ class Toggl_API extends Toggl_Controller {
 		// Make sure there's a workspace id added.
 		if ( is_array( $post_data ) && ! empty( $post_data ) ) { // assumes that an array key exists
 			$default_post_data[ key( $post_data ) ] = array(
-				'wid' => self::get_default_workspace()
+				'wid' => self::get_default_workspace(),
 			);
 			$post_data[ key( $post_data ) ] = wp_parse_args( $post_data[ key( $post_data ) ], $default_post_data[ key( $post_data ) ] );
 		}
 		$method = 'GET';
 		if ( 'delete' === $post_data ) {
 			$method = 'DELETE';
-		}
-		elseif ( ! empty( $post_data ) ) {
+		} elseif ( ! empty( $post_data ) ) {
 			$method = 'POST';
 		}
 		$params = array(
 			'method' => $method,
 			'headers' => array(
 					'Content-type' => 'application/json',
-					'Authorization' => 'Basic ' . base64_encode( Toggl_Settings::get_api_key() . ':api_token' )
+					'Authorization' => 'Basic ' . base64_encode( Toggl_Settings::get_api_key() . ':api_token' ),
 				),
 			'httpversion' => '1.1',
 			'body' => wp_json_encode( $post_data ),
@@ -95,7 +94,7 @@ class Toggl_API extends Toggl_Controller {
 			'method' => 'GET',
 			'headers' => array(
 					'Content-type' => 'application/json',
-					'Authorization' => 'Basic ' . base64_encode( Toggl_Settings::get_api_key() . ':api_token' )
+					'Authorization' => 'Basic ' . base64_encode( Toggl_Settings::get_api_key() . ':api_token' ),
 				),
 			'httpversion' => '1.1',
 			'timeout' => apply_filters( 'http_request_timeout', 15 ),
@@ -110,5 +109,4 @@ class Toggl_API extends Toggl_Controller {
 		}
 		return $api_response;
 	}
-
 }

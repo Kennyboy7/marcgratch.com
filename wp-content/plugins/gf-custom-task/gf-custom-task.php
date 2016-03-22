@@ -61,16 +61,16 @@ function populate_project_dropdown( $form ) {
 
 	return $form;
 }
-add_filter( 'gform_pre_render', 'populate_pods_dropdown' );
+add_filter( 'gform_pre_render_5', 'populate_pods_dropdown' );
 
 //Note: when changing drop down values, we also need to use the gform_pre_validation so that the new values are available when validating the field.
-add_filter( 'gform_pre_validation', 'populate_pods_dropdown' );
+add_filter( 'gform_pre_validation_5', 'populate_pods_dropdown' );
 
 //Note: when changing drop down values, we also need to use the gform_admin_pre_render so that the right values are displayed when editing the entry.
-add_filter( 'gform_admin_pre_render', 'populate_pods_dropdown' );
+add_filter( 'gform_admin_pre_render_5', 'populate_pods_dropdown' );
 
 //Note: this will allow for the labels to be used during the submission process in case values are enabled
-add_filter( 'gform_pre_submission_filter', 'populate_pods_dropdown' );
+add_filter( 'gform_pre_submission_filter_5', 'populate_pods_dropdown' );
 function populate_pods_dropdown( $form ) {
 
 	//only populating drop down for form id 5
@@ -521,7 +521,7 @@ function set_post_content( $post_id, $entry, $form ) {
 
 
 }
-add_action( 'gform_after_create_post', 'set_post_content', 99999, 3 );
+add_action( 'gform_after_create_post_5', 'set_post_content', 99999, 3 );
 
 function process_ajax_on_project_change(){
 	$has_admin = array();

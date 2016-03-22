@@ -39,19 +39,19 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 						'option' => array(
 							'type' => 'bypass',
 							'output' => '<code>['.self::SUBMISSION_SHORTCODE.']Thank you![/'.self::SUBMISSION_SHORTCODE.']</code>',
-							'description' => sprintf( __( 'To get you started, Sprout Invoices provides a <a href="%s" target="_blank">fully customizable form</a> for estimate submissions. Simply add this shortcode to a page and an estimate submission form will be available to prospective clients. Notifications will be sent for each submission and a new estimate (and client) will be generated.', 'sprout-invoices' ), 'https://sproutapps.co/support/knowledgebase/sprout-invoices/advanced/customize-estimate-submission-form/' )
-							)
+							'description' => sprintf( __( 'To get you started, Sprout Invoices provides a <a href="%s" target="_blank">fully customizable form</a> for estimate submissions. Simply add this shortcode to a page and an estimate submission form will be available to prospective clients. Notifications will be sent for each submission and a new estimate (and client) will be generated.', 'sprout-invoices' ), 'https://sproutapps.co/support/knowledgebase/sprout-invoices/advanced/customize-estimate-submission-form/' ),
+							),
 						),
 					'advanced_submission_integration_addon' => array(
 						'label' => __( 'Gravity Forms and Ninja Forms Integration', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'bypass',
 							'output' => self::advanced_form_integration_view(),
-							'description' => sprintf( __( 'Instead of creating our own advanced form builder we\'ve integrated with the top WordPress form plugins. Make sure to read the <a href="%s" target="_blank">integration guide</a> to make the best use of your custom forms.', 'sprout-invoices' ), self::PLUGIN_URL.'/support/knowledgebase/sprout-invoices/advanced/customize-estimate-submission-form/' )
-							)
+							'description' => sprintf( __( 'Instead of creating our own advanced form builder we\'ve integrated with the top WordPress form plugins. Make sure to read the <a href="%s" target="_blank">integration guide</a> to make the best use of your custom forms.', 'sprout-invoices' ), self::PLUGIN_URL.'/support/knowledgebase/sprout-invoices/advanced/customize-estimate-submission-form/' ),
+							),
 						),
-					)
-				)
+					),
+				),
 			);
 		do_action( 'sprout_settings', $settings, self::SETTINGS_PAGE );
 
@@ -84,7 +84,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 
 	public static function submission_form( $atts, $content = '' ) {
 		// Don't show the form if it was successfully submitted
-		if ( isset( $_GET[self::SUBMISSION_SUCCESS_QV] ) && $_GET[self::SUBMISSION_SUCCESS_QV] ) {
+		if ( isset( $_GET[ self::SUBMISSION_SUCCESS_QV ] ) && $_GET[ self::SUBMISSION_SUCCESS_QV ] ) {
 			return $content;
 		}
 
@@ -100,7 +100,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'type' => 'text',
 			'required' => true,
 			'default' => '',
-			'description' => __( 'Very brief synopsis of the proposed project.', 'sprout-invoices' )
+			'description' => __( 'Very brief synopsis of the proposed project.', 'sprout-invoices' ),
 		);
 
 		$fields['requirements'] = array(
@@ -109,7 +109,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'type' => 'textarea',
 			'required' => true,
 			'default' => '',
-			'description' => __( 'The more detail the better.', 'sprout-invoices' )
+			'description' => __( 'The more detail the better.', 'sprout-invoices' ),
 		);
 
 		$fields['file'] = array(
@@ -118,7 +118,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'type' => 'file',
 			'required' => false,
 			'default' => '',
-			'description' => __( 'Upload a PDF or screenshots to help with your estimate requirements.', 'sprout-invoices' )
+			'description' => __( 'Upload a PDF or screenshots to help with your estimate requirements.', 'sprout-invoices' ),
 		);
 
 		$fields['state'] = array(
@@ -126,14 +126,14 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'label' => __( 'Project State', 'sprout-invoices' ),
 			'type' => 'select',
 			'options' => array(
-					'new' => __( 'New Project (planning stage)', 'sprout-invoices'  ),
+					'new' => __( 'New Project (planning stage)', 'sprout-invoices' ),
 					'old' => __( 'Old site new project', 'sprout-invoices' ),
 					'existing' => __( 'Existing Project', 'sprout-invoices' ),
-					'other' => __( 'Other', 'sprout-invoices' )
+					'other' => __( 'Other', 'sprout-invoices' ),
 				),
 			'required' => true,
 			'default' => '',
-			'description' => __( "Help us understand where you're at.", 'sprout-invoices' )
+			'description' => __( "Help us understand where you're at.", 'sprout-invoices' ),
 		);
 
 		$fields['delivery'] = array(
@@ -144,11 +144,11 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 					'flexible' => __( 'I\'m flexible', 'sprout-invoices' ),
 					'later' => __( '2-4 Months', 'sprout-invoices' ),
 					'soon' => __( '1-2 Months', 'sprout-invoices' ),
-					'now' => __( 'Much sooner', 'sprout-invoices' )
+					'now' => __( 'Much sooner', 'sprout-invoices' ),
 				),
 			'required' => true,
 			'default' => '',
-			'description' => __( "Help us understand where you're at.", 'sprout-invoices' )
+			'description' => __( "Help us understand where you're at.", 'sprout-invoices' ),
 		);
 
 		$fields['budget'] = array(
@@ -157,7 +157,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'type' => 'text',
 			'required' => false,
 			'default' => '',
-			'description' => __( 'This has little influence on estimates; this helps us better understand what you consider the scope of the project is and allows us to set appropriate expectations/solutions in our estimate.', 'sprout-invoices' )
+			'description' => __( 'This has little influence on estimates; this helps us better understand what you consider the scope of the project is and allows us to set appropriate expectations/solutions in our estimate.', 'sprout-invoices' ),
 		);
 
 		$fields['examples'] = array(
@@ -166,7 +166,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'type' => 'textarea',
 			'required' => false,
 			'default' => '',
-			'description' => __( 'Any example sites or items that may help.', 'sprout-invoices' )
+			'description' => __( 'Any example sites or items that may help.', 'sprout-invoices' ),
 		);
 
 		$fields['name'] = array(
@@ -175,7 +175,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'type' => 'text',
 			'required' => true,
 			'default' => '',
-			'description' => __( 'The first and last name of the project owner.', 'sprout-invoices' )
+			'description' => __( 'The first and last name of the project owner.', 'sprout-invoices' ),
 		);
 
 		$fields['client_name'] = array(
@@ -183,7 +183,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'label' => __( 'Company Name', 'sprout-invoices' ),
 			'type' => 'text',
 			'required' => true,
-			'default' => ''
+			'default' => '',
 		);
 
 		$fields['email'] = array(
@@ -191,7 +191,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'label' => __( 'Email', 'sprout-invoices' ),
 			'type' => 'text',
 			'required' => true,
-			'default' => ''
+			'default' => '',
 		);
 
 		$fields['website'] = array(
@@ -199,12 +199,12 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 			'label' => __( 'Website', 'sprout-invoices' ),
 			'type' => 'text',
 			'required' => true,
-			'placeholder' => 'http://'
+			'placeholder' => 'http://',
 		);
 
-		$fields[self::DEFAULT_NONCE] = array(
+		$fields[ self::DEFAULT_NONCE ] = array(
 			'type' => 'hidden',
-			'value' => wp_create_nonce( self::DEFAULT_NONCE )
+			'value' => wp_create_nonce( self::DEFAULT_NONCE ),
 		);
 
 		$fields = apply_filters( 'si_submission_form_fields', $fields );
@@ -259,7 +259,7 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 		$errors = array();
 		$fields = self::submission_form_fields();
 		foreach ( $fields as $key => $data ) {
-			if ( isset( $data['required'] ) && $data['required'] && ! ( isset( $submitted['sa_estimate_'.$key] ) && $submitted['sa_estimate_'.$key] != '' ) ) {
+			if ( isset( $data['required'] ) && $data['required'] && ! ( isset( $submitted[ 'sa_estimate_'.$key ] ) && $submitted[ 'sa_estimate_'.$key ] != '' ) ) {
 				$errors[] = sprintf( __( '"%s" field is required.', 'sprout-invoices' ), $data['label'] );
 			}
 		}
@@ -275,8 +275,8 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 		if ( ! isset( $args['fields'] ) ) {
 			$fields = self::submission_form_fields();
 			foreach ( $fields as $key => $data ) {
-				if ( isset( $_REQUEST['sa_estimate_'.$key] ) && $_REQUEST['sa_estimate_'.$key] != '' ) {
-					$args['fields'][$key] = array( 'data' => $data, 'value' => $_REQUEST['sa_estimate_'.$key] );
+				if ( isset( $_REQUEST[ 'sa_estimate_'.$key ] ) && $_REQUEST[ 'sa_estimate_'.$key ] != '' ) {
+					$args['fields'][ $key ] = array( 'data' => $data, 'value' => $_REQUEST[ 'sa_estimate_'.$key ] );
 				}
 			}
 		}
@@ -315,5 +315,4 @@ class SI_Estimates_Submission_Premium extends SI_Estimate_Submissions {
 		// End
 		do_action( 'estimate_submitted', $estimate, $parsed_args );
 	}
-
 }

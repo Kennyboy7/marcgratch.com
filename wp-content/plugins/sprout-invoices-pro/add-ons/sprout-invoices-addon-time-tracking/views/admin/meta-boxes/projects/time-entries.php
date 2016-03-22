@@ -28,16 +28,19 @@
 					if ( ! is_a( $time, 'SI_Record' ) ) {
 						continue;
 					}
-					$time_records[$time_id] = $time->get_data();
+					$time_records[ $time_id ] = $time->get_data();
 				}
 
 				uasort( $time_records, array( 'SI_Controller', 'sort_by_date' ) );
 
 				foreach ( $time_records as $time_id => $data ) :
-
+					if ( ! isset( $data['time_val'] ) ) {
+						continue;
+					}
 					$time = SI_Time::get_time_entry( $time_id );
 					$activity = SI_Time::get_instance( $time->get_associate_id() );
-					$user = get_userdata( $data['user_id'] );
+					$user_id = ( isset( $data['user_id'] ) ) ? $data['user_id']: get_current_user_id();
+					$user = get_userdata( $user_id );
 
 					$cost = ( is_a( $activity, 'SI_Time' ) ) ? $data['time_val'] * $activity->get_default_rate()  : 0 ;
 					$total_time += (float) $data['time_val'];
@@ -46,8 +49,7 @@
 					if ( isset( $data['invoice_id'] ) ) {
 						$billed_total_time += (float) $data['time_val'];
 						$billed_total_cost += $cost;
-					}
-					elseif ( $activity->is_billable() ) {
+					} elseif ( $activity->is_billable() ) {
 						$unbilled_total_time += (float) $data['time_val'];
 						$unbilled_total_cost += $cost;
 					} ?>

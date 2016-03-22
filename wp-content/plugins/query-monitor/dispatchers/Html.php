@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -122,6 +122,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		add_action( 'wp_enqueue_scripts',    array( $this, 'enqueue_assets' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+		add_action( 'send_headers',          'nocache_headers' );
 
 	}
 
@@ -206,6 +207,9 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			if ( apply_filters( 'qm/output/absolute_position', $absolute ) ) {
 				$class[] = 'qm-absolute';
 			}
+
+			$class[] = sprintf( 'qm-theme-%s', get_template() );
+			$class[] = sprintf( 'qm-theme-%s', get_stylesheet() );
 		}
 
 		if ( !is_admin_bar_showing() ) {

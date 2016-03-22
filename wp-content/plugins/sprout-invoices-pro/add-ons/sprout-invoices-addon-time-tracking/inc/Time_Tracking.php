@@ -86,7 +86,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 			'rate' => array(
 					'label' => __( 'Rate', 'sprout-invoices' ),
 					'type' => 'small-input',
-					'placehselect2-dropdownolder' => '120',
+					'placeholder' => '120',
 					'calc' => false,
 					'hide_if_parent' => true,
 					'weight' => 5,

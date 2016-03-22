@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -85,7 +85,9 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 				return false;
 			}
 
-			$trace  = new QM_Backtrace;
+			$trace  = new QM_Backtrace( array(
+				'ignore_current_filter' => false,
+			) );
 			$caller = $trace->get_caller();
 			$key    = md5( $message . $file . $line . $caller['id'] );
 

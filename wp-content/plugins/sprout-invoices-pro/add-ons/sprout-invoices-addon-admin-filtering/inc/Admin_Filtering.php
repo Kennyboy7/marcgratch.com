@@ -50,8 +50,8 @@ class SI_Admin_Filtering extends SI_Controller {
 		echo '<select name="dm" id="filter-by-duedate">';
 		printf( '<option %s value="0">%s</option>', selected( $m, 0, false ), __( 'All due dates', 'sprout-invoices' ) );
 		foreach ( $months as $arc_row ) {
-			if ( 0 == $arc_row->year )
-				continue;
+			if ( 0 == $arc_row->year ) {
+				continue; }
 
 			$month = zeroise( $arc_row->month, 2 );
 			$year = $arc_row->year;
@@ -88,13 +88,16 @@ class SI_Admin_Filtering extends SI_Controller {
 
 	}
 
-	public static function filter_admin_table_register_qvs( $query_vars ){
+	public static function filter_admin_table_register_qvs( $query_vars ) {
 		$query_vars[] = 'dm';
 		$query_vars[] = 'client_id';
 		return $query_vars;
 	}
 
 	public static function filter_admin_table_results( $query ) {
+		if ( ! isset( $query->query['post_type'] ) ) {
+			return;
+		}
 		if ( ! in_array( $query->query['post_type'], array( SI_Invoice::POST_TYPE, SI_Estimate::POST_TYPE ) ) ) {
 			return;
 		}
@@ -127,7 +130,7 @@ class SI_Admin_Filtering extends SI_Controller {
 
 			// If there are no results don't pass an empty array, otherwise WP will return all.
 			if ( empty( $ids ) ) {
-				$ids = array( 0 ); 
+				$ids = array( 0 );
 			}
 			// Set to certain posts
 			$query->set( 'post__in', $ids );
@@ -153,10 +156,10 @@ class SI_Admin_Filtering extends SI_Controller {
 				$and_posts_in
 				ORDER BY $wpdb->postmeta.meta_value DESC
 			", '_client_id', $client_id, $post_type ) );
-			
+
 			// If there are no results don't pass an empty array, otherwise WP will return all.
 			if ( empty( $ids ) ) {
-				$ids = array( 0 ); 
+				$ids = array( 0 );
 			}
 			// Set to certain posts
 			$query->set( 'post__in', $ids );
@@ -170,12 +173,12 @@ class SI_Admin_Filtering extends SI_Controller {
 	public static function custom_bulk_admin_footer() {
 		global $post_type;
 
-		if ( in_array( $post_type, array( SI_Invoice::POST_TYPE, SI_Estimate::POST_TYPE ) ) ) { 
+		if ( in_array( $post_type, array( SI_Invoice::POST_TYPE, SI_Estimate::POST_TYPE ) ) ) {
 			?>
 				<script type="text/javascript">
 					jQuery(document).ready(function() {
-						jQuery('<option>').val('send').text('<?php _e( "Send invoice", 'sprout-invoices' ) ?>').appendTo('select[name="action"]');
-						jQuery('<option>').val('send').text('<?php _e( "Send invoice", 'sprout-invoices' ) ?>').appendTo('select[name="action2"]');
+						jQuery('<option>').val('send').text('<?php _e( 'Send invoice', 'sprout-invoices' ) ?>').appendTo('select[name="action"]');
+						jQuery('<option>').val('send').text('<?php _e( 'Send invoice', 'sprout-invoices' ) ?>').appendTo('select[name="action2"]');
 					});
 				</script>
 			<?php
@@ -254,8 +257,7 @@ class SI_Admin_Filtering extends SI_Controller {
 			}
 			if ( is_a( $doc, 'SI_Estimate' ) ) {
 				do_action( 'send_estimate', $doc, $recipients );
-			}
-			elseif ( is_a( $doc, 'SI_Invoice' ) ) {
+			} elseif ( is_a( $doc, 'SI_Invoice' ) ) {
 				do_action( 'send_invoice', $doc, $recipients );
 				// If status is temp than change to pending.
 				if ( $doc->get_status() === SI_Invoice::STATUS_TEMP ) {
@@ -264,5 +266,4 @@ class SI_Admin_Filtering extends SI_Controller {
 			}
 		}
 	}
-
 }

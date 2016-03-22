@@ -127,6 +127,13 @@ class GFExport {
 				break;
 
 			default:
+                /**
+                 * Fires when export pages are gathered
+                 *
+                 * Used to add additional export settings pages
+                 *
+                 * @param string $view Set when defining the action string.  Creates the name for the new page
+                 */
 				do_action( "gform_export_page_{$view}" );
 				break;
 
@@ -149,8 +156,12 @@ class GFExport {
 		$forms = json_decode( $forms_json, true );
 
 		if ( ! $forms ) {
+			GFCommon::log_debug( __METHOD__ . '(): Import Failed. Invalid form objects.' );
+
 			return 0;
 		} else if ( version_compare( $forms['version'], self::$min_import_version, '<' ) ) {
+			GFCommon::log_debug( __METHOD__ . '(): Import Failed. The JSON version is not compatible with the current Gravity Forms version.' );
+
 			return - 1;
 		} //Error. JSON version is not compatible with current Gravity Forms version
 
@@ -159,6 +170,7 @@ class GFExport {
 		$form_ids = GFAPI::add_forms( $forms );
 
 		if ( is_wp_error( $form_ids ) ) {
+			GFCommon::log_debug( __METHOD__ . '(): Import Failed => ' . print_r( $form_ids, 1 ) );
 			$form_ids = array();
 		} else {
 			foreach ( $form_ids as $key => $form_id ){
@@ -166,6 +178,8 @@ class GFExport {
 			}
 			/**
 			 * Fires after forms have been imported.
+             *
+             * Used to perform additional actions after import
 			 *
 			 * @param array $forms An array imported form objects.
 			 *
@@ -562,7 +576,7 @@ class GFExport {
 
 	}
 
-	private static function get_field_row_count( $form, $exported_field_ids, $entry_count ) {
+	public static function get_field_row_count( $form, $exported_field_ids, $entry_count ) {
 		$list_fields = GFAPI::get_fields_by_type( $form, array( 'list' ), true );
 
 		//only getting fields that have been exported
@@ -780,10 +794,10 @@ class GFExport {
 		/**
 		 * Fires after exporting all the entries in form
 		 *
-		 * @param array $form The Form object to get the entries from
+		 * @param array  $form       The Form object to get the entries from
 		 * @param string $start_date The start date for when the export of entries should take place
-		 * @param string $end_date The end date for when the export of entries should stop
-		 * @param array $fields The specified fields where the entries should be exported from
+		 * @param string $end_date   The end date for when the export of entries should stop
+		 * @param array  $fields     The specified fields where the entries should be exported from
 		 */
 		do_action( 'gform_post_export_entries', $form, $start_date, $end_date, $fields );
 

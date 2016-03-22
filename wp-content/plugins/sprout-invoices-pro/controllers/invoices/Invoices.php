@@ -2,11 +2,11 @@
 
 
 /**
- * Clients Controller
+ * Invoices Controller
  *
  *
  * @package Sprout_Invoice
- * @subpackage Clients
+ * @subpackage Invoices
  */
 class SI_Invoices extends SI_Controller {
 	const HISTORY_UPDATE = 'si_history_update';
@@ -16,7 +16,7 @@ class SI_Invoices extends SI_Controller {
 	public static function init() {
 
 		// Unique urls
-		add_filter( 'wp_unique_post_slug', array( __CLASS__, 'post_slug'), 10, 4 );
+		add_filter( 'wp_unique_post_slug', array( __CLASS__, 'post_slug' ), 10, 4 );
 
 		// Create invoice when estimate is approved.
 		add_action( 'doc_status_changed',  array( __CLASS__, 'create_invoice_on_est_acceptance' ), 0 ); // fire before any others
@@ -69,10 +69,9 @@ class SI_Invoices extends SI_Controller {
 		if ( isset( $_REQUEST['serialized_fields'] ) ) {
 			foreach ( $_REQUEST['serialized_fields'] as $key => $data ) {
 				if ( strpos( $data['name'], '[]' ) !== false ) {
-					$_REQUEST[str_replace( '[]', '', $data['name'] )][] = $data['value'];
-				}
-				else {
-					$_REQUEST[$data['name']] = $data['value'];
+					$_REQUEST[ str_replace( '[]', '', $data['name'] ) ][] = $data['value'];
+				} else {
+					$_REQUEST[ $data['name'] ] = $data['value'];
 				}
 			}
 		}
@@ -96,8 +95,12 @@ class SI_Invoices extends SI_Controller {
 		$recipients = ( isset( $_REQUEST['sa_metabox_recipients'] ) ) ? $_REQUEST['sa_metabox_recipients'] : array();
 
 		if ( isset( $_REQUEST['sa_metabox_custom_recipient'] ) && '' !== trim( $_REQUEST['sa_metabox_custom_recipient'] ) ) {
-			if ( is_email( $_REQUEST['sa_metabox_custom_recipient'] ) ) {
-				$recipients[] = $_REQUEST['sa_metabox_custom_recipient'];
+			$submitted_recipients = explode( ',', trim( $_REQUEST['sa_metabox_custom_recipient'] ) );
+			foreach ( $submitted_recipients as $key => $email ) {
+				$email = trim( $email );
+				if ( is_email( $email ) ) {
+					$recipients[] = $email;
+				}
 			}
 		}
 
@@ -138,11 +141,13 @@ class SI_Invoices extends SI_Controller {
 	public static function change_status_after_payment( SI_Payment $payment ) {
 		$invoice_id = $payment->get_invoice_id();
 		$invoice = SI_Invoice::get_instance( $invoice_id );
+		if ( ! is_a( $invoice, 'SI_Invoice' ) ) {
+			return;
+		}
 		// If the invoice has a balance the status should be changed to partial.
 		if ( $invoice->get_balance() >= 0.01 ) {
 			$invoice->set_as_partial();
-		}
-		else { // else there's no balance
+		} else { // else there's no balance
 			$invoice->set_as_paid();
 		}
 	}
@@ -157,7 +162,7 @@ class SI_Invoices extends SI_Controller {
 			return;
 		}
 		// Check if status changed was to approved.
-		if ( $doc->get_status() != SI_Invoice::STATUS_PAID ) {
+		if ( SI_Invoice::STATUS_PAID !== $doc->get_status() ) {
 			return;
 		}
 		$balance = $doc->get_balance();
@@ -177,7 +182,7 @@ class SI_Invoices extends SI_Controller {
 			return;
 		}
 		// Check if status changed was to approved.
-		if ( $doc->get_status() != SI_Estimate::STATUS_APPROVED ) {
+		if ( SI_Estimate::STATUS_APPROVED !== $doc->get_status() ) {
 			return;
 		}
 		if ( apply_filters( 'si_disable_create_invoice_on_est_acceptance', false, $doc ) ) {
@@ -185,7 +190,7 @@ class SI_Invoices extends SI_Controller {
 		}
 		$invoice_post_id = self::clone_post( $doc->get_id(), SI_Invoice::STATUS_PENDING, SI_Invoice::POST_TYPE );
 		$invoice = SI_Invoice::get_instance( $invoice_post_id );
-		
+
 		// blank
 		$invoice->set_sender_note();
 		// transfer over since meta_key is different
@@ -204,8 +209,8 @@ class SI_Invoices extends SI_Controller {
 	 * @return
 	 */
 	public static function associate_invoice_after_clone( $new_post_id = 0, $cloned_post_id = 0, $new_post_type = '' ) {
-		if ( get_post_type( $cloned_post_id ) == SI_Estimate::POST_TYPE ) {
-			if ( $new_post_type == SI_Invoice::POST_TYPE ) {
+		if ( SI_Estimate::POST_TYPE === get_post_type( $cloned_post_id ) ) {
+			if ( SI_Invoice::POST_TYPE === $new_post_type ) {
 				$invoice = SI_Invoice::get_instance( $new_post_id );
 				$invoice->set_estimate_id( $cloned_post_id );
 				$invoice->set_as_temp();
@@ -265,10 +270,9 @@ class SI_Invoices extends SI_Controller {
 	public static function is_edit_screen() {
 		$screen = get_current_screen();
 		$screen_post_type = str_replace( 'edit-', '', $screen->id );
-		if ( $screen_post_type == SI_Invoice::POST_TYPE ) {
+		if ( SI_Invoice::POST_TYPE === $screen_post_type ) {
 			return true;
 		}
 		return false;
 	}
-
 }

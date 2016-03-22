@@ -1,0 +1,7 @@
+= 1.1 =
+
+* Fix default title
+
+= 1.0 =
+
+* Initial Release

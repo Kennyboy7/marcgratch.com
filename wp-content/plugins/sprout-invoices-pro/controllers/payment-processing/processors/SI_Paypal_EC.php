@@ -95,7 +95,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 		$option = array(
 			'icons' => array( SI_URL . '/resources/front-end/img/paypal.png' ),
 			'label' => __( 'Paypal', 'sprout-invoices' ),
-			'cc' => array()
+			'cc' => array(),
 			);
 		return apply_filters( 'si_paypal_ec_checkout_options', $option );
 	}
@@ -115,7 +115,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 		}
 
 		if ( is_admin() ) {
-			add_action( 'init', array( get_class(), 'register_options') );
+			add_action( 'init', array( get_class(), 'register_options' ) );
 		}
 
 		add_action( 'si_checkout_action_'.SI_Checkouts::PAYMENT_PAGE, array( $this, 'send_offsite' ), 0, 1 );
@@ -149,47 +149,47 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 								self::MODE_LIVE => __( 'Live', 'sprout-invoices' ),
 								self::MODE_TEST => __( 'Sandbox', 'sprout-invoices' ),
 								),
-							'default' => self::$api_mode
-							)
+							'default' => self::$api_mode,
+							),
 						),
 					self::API_USERNAME_OPTION => array(
 						'label' => __( 'API Username', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
-							'default' => self::$api_username
-							)
+							'default' => self::$api_username,
+							),
 						),
 					self::API_PASSWORD_OPTION => array(
 						'label' => __( 'API Password', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
-							'default' => self::$api_password
-							)
+							'default' => self::$api_password,
+							),
 						),
 					self::API_SIGNATURE_OPTION => array(
 						'label' => __( 'API Signature', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
-							'default' => self::$api_signature
-							)
+							'default' => self::$api_signature,
+							),
 						),
 					self::CURRENCY_CODE_OPTION => array(
 						'label' => __( 'Currency Code', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
 							'default' => self::$currency_code,
-							'attributes' => array( 'class' => 'small-text' )
-							)
+							'attributes' => array( 'class' => 'small-text' ),
+							),
 						),
 					self::CANCEL_URL_OPTION => array(
 						'label' => __( 'Cancel URL', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
-							'default' => self::$cancel_url
-							)
-						)
-					)
-				)
+							'default' => self::$cancel_url,
+							),
+						),
+					),
+				),
 			);
 		do_action( 'sprout_settings', $settings, self::SETTINGS_PAGE );
 	}
@@ -210,7 +210,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 		// No form to validate
 		remove_action( 'si_checkout_action_'.SI_Checkouts::PAYMENT_PAGE, array( $checkout, 'process_payment_page' ) );
 
-		if ( ! isset( $_GET['token'] ) && $_REQUEST[SI_Checkouts::CHECKOUT_ACTION] == SI_Checkouts::PAYMENT_PAGE ) {
+		if ( ! isset( $_GET['token'] ) && $_REQUEST[ SI_Checkouts::CHECKOUT_ACTION ] == SI_Checkouts::PAYMENT_PAGE ) {
 
 			$invoice = $checkout->get_invoice();
 
@@ -225,8 +225,8 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 					'method' => 'POST',
 					'body' => $post_data,
 					'timeout' => apply_filters( 'http_request_timeout', 15 ),
-					'sslverify' => false
-				) );
+					'sslverify' => false,
+			) );
 
 			do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal EC Approval Response', $response );
 
@@ -337,8 +337,14 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 	public static function payment_request_line_items( SI_Invoice $invoice ) {
 		$i = 0;
 		$total = 0;
+		$line_items = $invoice->get_line_items();
 		// we can add individual item info if there's actually an item cost
-		foreach ( $invoice->get_line_items() as $position => $data ) {
+		foreach ( $line_items as $position => $data ) {
+			$children = si_line_item_get_children( $data['key'], $line_items );
+			$is_parent_line_item = ( ! empty( $children ) ) ? true : false ;
+			if ( $is_parent_line_item ) {
+				continue;
+			}
 			if ( $data['total'] ) {
 				$nvpData[ 'L_PAYMENTREQUEST_0_NAME' . $i ] = html_entity_decode( strip_tags( $data['desc'] ), ENT_QUOTES, 'UTF-8' );
 				$nvpData[ 'L_PAYMENTREQUEST_0_AMT' . $i ] = si_get_number_format( $data['rate'] * $data['qty'] );
@@ -482,9 +488,9 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 			'invoice' => $invoice->get_id(),
 			'amount' => $response['PAYMENTINFO_0_AMT'],
 			'data' => array(
-				'live' => ( self::$api_mode == self::MODE_LIVE ),
-				'api_response' => $response,
-				'payment_token' => self::get_token(),
+			'live' => ( self::$api_mode == self::MODE_LIVE ),
+			'api_response' => $response,
+			'payment_token' => self::get_token(),
 			),
 		), SI_Payment::STATUS_AUTHORIZED );
 		if ( ! $payment_id ) {
@@ -580,7 +586,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 					'httpversion' => '1.1',
 					'body' => $post_data,
 					'timeout' => apply_filters( 'http_request_timeout', 15 ),
-					'sslverify' => false
+					'sslverify' => false,
 				) );
 
 				if ( ! is_wp_error( $response ) && $response['response']['code'] == '200' ) {
@@ -596,7 +602,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 							'response' => $response,
 						);
 						do_action( 'si_error', __CLASS__ . '::' . __FUNCTION__ . ' - capture response error', $error );
-						if ( $response[ 'L_ERRORCODE0'] == 10601 || 10602 ) { // authorization expired or authorization complete
+						if ( $response['L_ERRORCODE0'] == 10601 || 10602 ) { // authorization expired or authorization complete
 							$payment->set_status( SI_Payment::STATUS_VOID );
 						}
 					}
@@ -613,7 +619,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 	 * @param string  $status
 	 * @return array
 	 */
-	private function capture_nvp_data( $transaction_id, $amount, $invoice_id  ) {
+	private function capture_nvp_data( $transaction_id, $amount, $invoice_id ) {
 		$nvpData = array();
 
 		$nvpData['USER'] = self::$api_username;
@@ -671,7 +677,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 			'httpversion' => '1.1',
 			'body' => $post_data,
 			'timeout' => apply_filters( 'http_request_timeout', 15 ),
-			'sslverify' => false
+			'sslverify' => false,
 		) );
 
 		do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal EC Recurring Payment Response (Raw)', $response );
@@ -697,8 +703,8 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 			'invoice' => $invoice->get_id(),
 			'amount' => $post_data['AMT'],
 			'data' => array(
-				'live' => ( self::$api_mode == self::MODE_LIVE ),
-				'api_response' => $response
+			'live' => ( self::$api_mode == self::MODE_LIVE ),
+			'api_response' => $response,
 			),
 		), SI_Payment::STATUS_RECURRING );
 
@@ -713,7 +719,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 		$payment_data = $payment->get_data();
 
 		$term = SI_Subscription_Payments::get_term( $invoice_id ); // day, week, month, or year
-		$duration = (int)SI_Subscription_Payments::get_duration( $invoice_id );
+		$duration = (int) SI_Subscription_Payments::get_duration( $invoice_id );
 		$price = SI_Subscription_Payments::get_renew_price( $invoice_id );
 
 		$terms = array(
@@ -723,7 +729,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 		'month' => 'Month',
 		'year' => 'Year',
 		);
-		if ( ! isset( $terms[$term] ) ) {
+		if ( ! isset( $terms[ $term ] ) ) {
 			$term = 'day';
 		}
 
@@ -748,7 +754,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 		'DESC' => $this->recurring_desc( $invoice ),
 		'MAXFAILEDPAYMENTS' => 2,
 		'AUTOBILLOUTAMT' => 'AddToNextBilling',
-		'BILLINGPERIOD' => $terms[$term],
+		'BILLINGPERIOD' => $terms[ $term ],
 		'BILLINGFREQUENCY' => $duration,
 		'TOTALBILLINGCYCLES' => 0,
 
@@ -801,7 +807,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 			'method' => 'POST',
 			'body' => $nvp,
 			'timeout' => apply_filters( 'http_request_timeout', 15 ),
-			'sslverify' => false
+			'sslverify' => false,
 		) );
 
 		do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal EC Recurring Payment Details Response (Raw)', $response );
@@ -852,7 +858,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 			'method' => 'POST',
 			'body' => $nvp,
 			'timeout' => apply_filters( 'http_request_timeout', 15 ),
-			'sslverify' => false
+			'sslverify' => false,
 		) );
 
 		do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal EC Cancel Recurring Payment Response (Raw)', $response );
@@ -894,8 +900,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 			_e( 'Paypal Profile ID: ', 'sprout-invoices' );
 			if ( isset( $data['live'] ) && ! $data['live'] ) {
 				printf( '<a class="payment_profile_link" href="https://www.sandbox.paypal.com/us/cgi-bin/webscr?cmd=_profile-recurring-payments&encrypted_profile_id=%s" target="_blank">%s</a>', $data['api_response']['PROFILEID'], $data['api_response']['PROFILEID'] );
-			}
-			else {
+			} else {
 				printf( '<a class="payment_profile_link" href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_profile-recurring-payments&encrypted_profile_id=%s" target="_blank">%s</a>', $data['api_response']['PROFILEID'], $data['api_response']['PROFILEID'] );
 			}
 		}
@@ -924,11 +929,11 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 			if ( preg_match( '/^L_SHORTMESSAGE(\d+)$/', $key, $matches ) ) {
 				$message_id = $matches[1];
 				$message = $value;
-				if ( isset( $response[ 'L_LONGMESSAGE'.$message_id] ) ) {
-					$message .= sprintf( ': %s', $response[ 'L_LONGMESSAGE'.$message_id] );
+				if ( isset( $response[ 'L_LONGMESSAGE'.$message_id ] ) ) {
+					$message .= sprintf( ': %s', $response[ 'L_LONGMESSAGE'.$message_id ] );
 				}
-				if ( isset( $response[ 'L_ERRORCODE'.$message_id] ) ) {
-					$message .= sprintf( __( ' (Error Code: %s)', 'sprout-invoices' ), $response[ 'L_ERRORCODE'.$message_id] );
+				if ( isset( $response[ 'L_ERRORCODE'.$message_id ] ) ) {
+					$message .= sprintf( __( ' (Error Code: %s)', 'sprout-invoices' ), $response[ 'L_ERRORCODE'.$message_id ] );
 				}
 				if ( $display ) {
 					self::set_message( $message, self::MESSAGE_STATUS_ERROR );

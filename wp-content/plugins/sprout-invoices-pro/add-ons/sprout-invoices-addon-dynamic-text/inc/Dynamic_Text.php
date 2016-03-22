@@ -71,8 +71,7 @@ class SI_Dynamic_Text extends SI_Controller {
 		$time = time();
 		if ( si_get_doc_context() == 'estimate' ) {
 			$time = si_get_estimate_issue_date();
-		}
-		else {
+		} else {
 			$time = si_get_invoice_issue_date();
 		}
 		if ( isset( $atts['offset'] ) ) {
@@ -86,8 +85,7 @@ class SI_Dynamic_Text extends SI_Controller {
 		$time = time();
 		if ( si_get_doc_context() == 'estimate' ) {
 			$time = si_get_estimate_issue_date();
-		}
-		else {
+		} else {
 			$time = si_get_invoice_issue_date();
 		}
 		if ( isset( $atts['offset'] ) ) {
@@ -101,23 +99,21 @@ class SI_Dynamic_Text extends SI_Controller {
 		$time = time();
 		if ( si_get_doc_context() == 'estimate' ) {
 			$time = si_get_estimate_issue_date();
-		}
-		else {
+		} else {
 			$time = si_get_invoice_issue_date();
 		}
 		if ( isset( $atts['offset'] ) ) {
-			$offset = ceil( preg_replace( '/[^\d-+]/', '', $atts['offset'] )*3 );
+			$offset = ceil( preg_replace( '/[^\d-+]/', '', $atts['offset'] ) * 3 );
 			$time = strtotime( $offset.' months', $time );
 		}
 		return 'Q' . ceil( date( 'm', $time ) / 3 );
 	}
 
 	public static function due_date( $atts = array() ) {
-		$time = time()*60*60*24*7;
+		$time = time() * 60 * 60 * 24 * 7;
 		if ( si_get_doc_context() == 'estimate' ) {
 			$time = si_get_estimate_expiration_date();
-		}
-		else {
+		} else {
 			$time = si_get_invoice_due_date();
 		}
 		return date_i18n( 'Y', $time );
@@ -127,8 +123,7 @@ class SI_Dynamic_Text extends SI_Controller {
 		$id = 0;
 		if ( si_get_doc_context() == 'estimate' ) {
 			$id = si_get_estimate_id();
-		}
-		else {
+		} else {
 			$id = si_get_invoice_id();
 		}
 		return $id;
@@ -137,10 +132,9 @@ class SI_Dynamic_Text extends SI_Controller {
 	public static function discount( $atts = array() ) {
 		$discount = 0;
 		if ( si_get_doc_context() == 'estimate' ) {
-			$discount = si_get_estimate_subtotal()*( si_get_estimate_discount() / 100 );
-		}
-		else {
-			$discount = si_get_invoice_subtotal()*( si_get_invoice_discount() / 100 );
+			$discount = si_get_estimate_subtotal() * ( si_get_estimate_discount() / 100 );
+		} else {
+			$discount = si_get_invoice_subtotal() * ( si_get_invoice_discount() / 100 );
 		}
 		return sa_get_formatted_money( $discount );
 	}
@@ -149,8 +143,7 @@ class SI_Dynamic_Text extends SI_Controller {
 		$id = 0;
 		if ( si_get_doc_context() == 'estimate' ) {
 			$id = si_get_estimate_id();
-		}
-		else {
+		} else {
 			$id = si_get_invoice_id();
 		}
 		$doc = si_get_doc_object( $id );
@@ -165,8 +158,7 @@ class SI_Dynamic_Text extends SI_Controller {
 		$id = 0;
 		if ( si_get_doc_context() == 'estimate' ) {
 			$id = si_get_estimate_id();
-		}
-		else {
+		} else {
 			$id = si_get_invoice_id();
 		}
 		$doc = si_get_doc_object( $id );
@@ -205,6 +197,4 @@ class SI_Dynamic_Text extends SI_Controller {
 	public static function addons_view_path() {
 		return SA_ADDON_DYNAMIC_TEXT_PATH . '/views/';
 	}
-
-
 }

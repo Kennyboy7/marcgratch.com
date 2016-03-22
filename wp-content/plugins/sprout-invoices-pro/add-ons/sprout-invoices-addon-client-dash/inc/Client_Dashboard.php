@@ -42,7 +42,6 @@ class SI_Client_Dashboard extends SI_Controller {
 		if ( self::show_login_page() ) {
 			do_action( 'sprout_invoices_dashboard_not_logged_in' );
 			return self::login_form();
-			return;
 		}
 
 		$user_id = 0;

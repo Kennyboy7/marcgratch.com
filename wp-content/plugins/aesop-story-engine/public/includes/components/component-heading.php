@@ -103,18 +103,26 @@ class AesopChapterHeadingComponent {
 		$chapterOffset = apply_filters( 'aesop_chapter_scroll_offset', 0 );
 
 		// filterable content class
-		//$contentClass = apply_filters( 'aesop_chapter_scroll_container', '.aesop-entry-content' );
-		$contentClass = apply_filters( 'aesop_chapter_scroll_container', '.content-area' );
-
+		$postClass = get_post_class(); 
+		if (in_array ( 'aesop-entry-content', $postClass ) )
+		{
+		   $contentClass = '.aesop-entry-content';
+		} else {
+		   $contentClass = apply_filters( 'aesop_chapter_scroll_container', '.entry-content' );
+		}
+/**/
 		// filterabl content header class
 		$contentHeaderClass = apply_filters( 'aesop_chapter_scroll_nav', '.aesop-entry-header' );
 ?>
 			<!-- Chapter Loader -->
 			<script>
 				jQuery(document).ready(function(){
+					contentClass = '<?php echo esc_attr( $contentClass );?>';
+					if (jQuery(contentClass).length==0) {
+						contentClass = '.aesop-entry-content';
+					} 
 					
-
-					jQuery('<?php echo esc_attr( $contentClass );?>').scrollNav({
+					jQuery(contentClass).scrollNav({
 					    sections: '.aesop-article-chapter-wrap',
 					    arrowKeys: true,
 					    insertTarget: '<?php echo esc_attr( $contentHeaderClass );?>',

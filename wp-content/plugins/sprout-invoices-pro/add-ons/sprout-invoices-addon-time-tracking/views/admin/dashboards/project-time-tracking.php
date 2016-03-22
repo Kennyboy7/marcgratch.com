@@ -52,16 +52,19 @@ if ( empty( $time_records ) ) {
 				$time = SI_Time::get_time_entry( $time_id );
 				$activity = SI_Time::get_instance( $time->get_associate_id() );
 
+				if ( ! isset( $data['time_val'] ) ) {
+					continue;
+				}
+
 				$cost = ( is_a( $activity, 'SI_Time' ) ) ? $data['time_val'] * $activity->get_default_rate()  : 0 ;
 				$total_time += (float) $data['time_val'];
 				$total_cost += $cost;
-				$user = get_userdata( $data['user_id'] );
+				$user = ( isset( $data['user_id'] ) ) ? get_userdata( $data['user_id'] ) : get_userdata( get_current_user_id() );
 
 				if ( isset( $data['invoice_id'] ) ) {
 					$billed_total_time += (float) $data['time_val'];
 					$billed_total_cost += $cost;
-				}
-				elseif ( $activity->is_billable() ) {
+				} elseif ( $activity->is_billable() ) {
 					$unbilled_total_time += (float) $data['time_val'];
 					$unbilled_total_cost += $cost;
 				} ?>

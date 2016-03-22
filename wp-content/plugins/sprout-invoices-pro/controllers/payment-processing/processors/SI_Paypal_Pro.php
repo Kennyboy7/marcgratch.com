@@ -90,7 +90,8 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 				SI_URL . '/resources/front-end/img/visa.png',
 				SI_URL . '/resources/front-end/img/mastercard.png',
 				SI_URL . '/resources/front-end/img/amex.png',
-				SI_URL . '/resources/front-end/img/discover.png' ),
+				SI_URL . '/resources/front-end/img/discover.png',
+			),
 			'label' => __( 'Credit Card', 'sprout-invoices' ),
 			'accepted_cards' => array(
 				'visa',
@@ -100,7 +101,7 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 				'discover',
 				// 'jcb',
 				// 'maestro'
-				)
+				),
 			);
 		return apply_filters( 'si_paypal_pro_checkout_options', $option );
 	}
@@ -114,7 +115,7 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 		self::$currency_code = get_option( self::CURRENCY_CODE_OPTION, 'USD' );
 
 		if ( is_admin() ) {
-			add_action( 'init', array( get_class(), 'register_options') );
+			add_action( 'init', array( get_class(), 'register_options' ) );
 		}
 
 		// Remove pages
@@ -134,7 +135,7 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 	 * @return array
 	 */
 	public function remove_checkout_pages( $pages ) {
-		unset( $pages[SI_Checkouts::REVIEW_PAGE] );
+		unset( $pages[ SI_Checkouts::REVIEW_PAGE ] );
 		return $pages;
 	}
 
@@ -158,40 +159,40 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 								self::MODE_LIVE => __( 'Live', 'sprout-invoices' ),
 								self::MODE_TEST => __( 'Sandbox', 'sprout-invoices' ),
 								),
-							'default' => self::$api_mode
-							)
+							'default' => self::$api_mode,
+							),
 						),
 					self::API_USERNAME_OPTION => array(
 						'label' => __( 'API Username', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
-							'default' => self::$api_username
-							)
+							'default' => self::$api_username,
+							),
 						),
 					self::API_PASSWORD_OPTION => array(
 						'label' => __( 'API Password', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
-							'default' => self::$api_password
-							)
+							'default' => self::$api_password,
+							),
 						),
 					self::API_SIGNATURE_OPTION => array(
 						'label' => __( 'API Signature', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
-							'default' => self::$api_signature
-							)
+							'default' => self::$api_signature,
+							),
 						),
 					self::CURRENCY_CODE_OPTION => array(
 						'label' => __( 'Currency Code', 'sprout-invoices' ),
 						'option' => array(
 							'type' => 'text',
 							'default' => self::$currency_code,
-							'attributes' => array( 'class' => 'small-text' )
-							)
-						)
-					)
-				)
+							'attributes' => array( 'class' => 'small-text' ),
+							),
+						),
+					),
+				),
 			);
 		do_action( 'sprout_settings', $settings, self::SETTINGS_PAGE );
 	}
@@ -210,8 +211,8 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 				'httpversion' => '1.1',
 				'body' => $post_data,
 				'timeout' => apply_filters( 'http_request_timeout', 30 ),
-				'sslverify' => false
-			) );
+				'sslverify' => false,
+		) );
 		do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal WPP $response', $response );
 
 		if ( is_wp_error( $response ) ) {
@@ -232,14 +233,14 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 		}
 
 		$payment_id = SI_Payment::new_payment( array(
-				'payment_method' => $this->get_payment_method(),
-				'invoice' => $invoice->get_id(),
-				'amount' => $response['AMT'],
-				'data' => array(
-					'live' => ( self::$api_mode == self::MODE_LIVE ),
-					'api_response' => $response,
-				),
-			), SI_Payment::STATUS_AUTHORIZED );
+			'payment_method' => $this->get_payment_method(),
+			'invoice' => $invoice->get_id(),
+			'amount' => $response['AMT'],
+			'data' => array(
+			'live' => ( self::$api_mode == self::MODE_LIVE ),
+			'api_response' => $response,
+			),
+		), SI_Payment::STATUS_AUTHORIZED );
 		if ( ! $payment_id ) {
 			return false;
 		}
@@ -280,8 +281,8 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 						'httpversion' => '1.1',
 						'body' => $post_data,
 						'timeout' => apply_filters( 'http_request_timeout', 15 ),
-						'sslverify' => false
-					) );
+						'sslverify' => false,
+				) );
 
 				if ( ! is_wp_error( $response ) && $response['response']['code'] == '200' ) {
 					$response = wp_parse_args( wp_remote_retrieve_body( $response ) );
@@ -296,7 +297,7 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 								'response' => $response,
 							);
 						do_action( 'si_error', __CLASS__ . '::' . __FUNCTION__ . ' - capture response error', $error );
-						if ( $response[ 'L_ERRORCODE0'] == 10601 || 10602 ) { // authorization expired or authorization complete
+						if ( $response['L_ERRORCODE0'] == 10601 || 10602 ) { // authorization expired or authorization complete
 							$payment->set_status( SI_Payment::STATUS_VOID );
 						}
 					}
@@ -373,8 +374,14 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 	public static function payment_request_line_items( SI_Invoice $invoice ) {
 		$i = 0;
 		$total = 0;
+		$line_items = $invoice->get_line_items();
 		// we can add individual item info if there's actually an item cost
-		foreach ( $invoice->get_line_items() as $position => $data ) {
+		foreach ( $line_items as $position => $data ) {
+			$children = si_line_item_get_children( $data['key'], $line_items );
+			$is_parent_line_item = ( ! empty( $children ) ) ? true : false ;
+			if ( $is_parent_line_item ) {
+				continue;
+			}
 			if ( $data['total'] ) {
 				$nvpData[ 'L_NAME' . $i ] = html_entity_decode( strip_tags( $data['desc'] ), ENT_QUOTES, 'UTF-8' );
 				$nvpData[ 'L_AMT' . $i ] = si_get_number_format( $data['rate'] * $data['qty'] );
@@ -490,8 +497,8 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 				'httpversion' => '1.1',
 				'body' => $post_data,
 				'timeout' => apply_filters( 'http_request_timeout', 15 ),
-				'sslverify' => false
-			) );
+				'sslverify' => false,
+		) );
 
 		do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal EC Recurring Payment Response (Raw)', $response );
 
@@ -512,14 +519,14 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 		}
 
 		$payment_id = SI_Payment::new_payment( array(
-				'payment_method' => self::get_payment_method(),
-				'invoice' => $invoice->get_id(),
-				'amount' => $post_data['AMT'],
-				'data' => array(
-					'live' => ( self::$api_mode == self::MODE_LIVE ),
-					'api_response' => $response
-				),
-			), SI_Payment::STATUS_RECURRING );
+			'payment_method' => self::get_payment_method(),
+			'invoice' => $invoice->get_id(),
+			'amount' => $post_data['AMT'],
+			'data' => array(
+			'live' => ( self::$api_mode == self::MODE_LIVE ),
+			'api_response' => $response,
+			),
+		), SI_Payment::STATUS_RECURRING );
 
 		// let the world know
 		do_action( 'si_paypal_recurring_payment_profile_created', $payment_id );
@@ -532,7 +539,7 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 		$payment_data = $payment->get_data();
 
 		$term = SI_Subscription_Payments::get_term( $invoice_id ); // day, week, month, or year
-		$duration = (int)SI_Subscription_Payments::get_duration( $invoice_id );
+		$duration = (int) SI_Subscription_Payments::get_duration( $invoice_id );
 		$price = SI_Subscription_Payments::get_renew_price( $invoice_id );
 
 		$terms = array(
@@ -542,7 +549,7 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 			'month' => 'Month',
 			'year' => 'Year',
 		);
-		if ( ! isset( $terms[$term] ) ) {
+		if ( ! isset( $terms[ $term ] ) ) {
 			$term = 'day';
 		}
 
@@ -631,8 +638,8 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 				'method' => 'POST',
 				'body' => $nvp,
 				'timeout' => apply_filters( 'http_request_timeout', 15 ),
-				'sslverify' => false
-			) );
+				'sslverify' => false,
+		) );
 
 		do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal EC Recurring Payment Details Response (Raw)', $response );
 
@@ -682,8 +689,8 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 				'method' => 'POST',
 				'body' => $nvp,
 				'timeout' => apply_filters( 'http_request_timeout', 15 ),
-				'sslverify' => false
-			) );
+				'sslverify' => false,
+		) );
 
 		do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal EC Cancel Recurring Payment Response (Raw)', $response );
 
@@ -724,8 +731,7 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 			_e( 'Paypal Profile ID: ', 'sprout-invoices' );
 			if ( isset( $data['live'] ) && ! $data['live'] ) {
 				printf( '<a class="payment_profile_link" href="https://www.sandbox.paypal.com/us/cgi-bin/webscr?cmd=_profile-recurring-payments&encrypted_profile_id=%s" target="_blank">%s</a>', $data['api_response']['PROFILEID'], $data['api_response']['PROFILEID'] );
-			}
-			else {
+			} else {
 				printf( '<a class="payment_profile_link" href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_profile-recurring-payments&encrypted_profile_id=%s" target="_blank">%s</a>', $data['api_response']['PROFILEID'], $data['api_response']['PROFILEID'] );
 			}
 		}
@@ -770,11 +776,11 @@ class SI_Paypal_Pro extends SI_Credit_Card_Processors {
 			if ( preg_match( '/^L_SHORTMESSAGE(\d+)$/', $key, $matches ) ) {
 				$message_id = $matches[1];
 				$message = $value;
-				if ( isset( $response[ 'L_LONGMESSAGE'.$message_id] ) ) {
-					$message .= sprintf( ': %s', $response[ 'L_LONGMESSAGE'.$message_id] );
+				if ( isset( $response[ 'L_LONGMESSAGE'.$message_id ] ) ) {
+					$message .= sprintf( ': %s', $response[ 'L_LONGMESSAGE'.$message_id ] );
 				}
-				if ( isset( $response[ 'L_ERRORCODE'.$message_id] ) ) {
-					$message .= sprintf( __( ' (Error Code: %s)', 'sprout-invoices' ), $response[ 'L_ERRORCODE'.$message_id] );
+				if ( isset( $response[ 'L_ERRORCODE'.$message_id ] ) ) {
+					$message .= sprintf( __( ' (Error Code: %s)', 'sprout-invoices' ), $response[ 'L_ERRORCODE'.$message_id ] );
 				}
 				if ( $display ) {
 					self::set_message( $message, self::MESSAGE_STATUS_ERROR );

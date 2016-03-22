@@ -15,6 +15,7 @@ class SI_Invoices_Recurring extends SI_Controller {
 		'frequency_custom' => '_recurring_custom_days', // int
 		'clone_time' => '_next_clone_time', // int
 		'cloned_from' => '_cloned_parent_invoice_id', // int
+		'duration' => '_time_before_stop', // int
 	);
 
 	public static function init() {
@@ -45,11 +46,10 @@ class SI_Invoices_Recurring extends SI_Controller {
 			return;
 		}
 		if ( ! $cloned_id ) {
-			printf( __( '<small>The billing agreement started on <em>%s</em>.</small>', 'sprout-invoices' ), date_i18n( get_option('date_format'), $start_date ) );
-		}
-		else {
+			printf( __( '<small>The billing agreement started on <em>%s</em>.</small>', 'sprout-invoices' ), date_i18n( get_option( 'date_format' ), $start_date ) );
+		} else {
 			$start_date = self::get_start_time( $cloned_id );
-			printf( __( '<small>Invoice generated from a billing agreement started on <em>%s</em>.</small>', 'sprout-invoices' ), date_i18n( get_option('date_format'), $start_date ) );
+			printf( __( '<small>Invoice generated from a billing agreement started on <em>%s</em>.</small>', 'sprout-invoices' ), date_i18n( get_option( 'date_format' ), $start_date ) );
 		}
 		echo '<style type="text/css">.estimate_info_row_wrap { display: none; }</style>';
 	}
@@ -87,7 +87,7 @@ class SI_Invoices_Recurring extends SI_Controller {
 				'priority' => 'low',
 				'weight' => 0,
 				'save_priority' => 0,
-			)
+			),
 		);
 		do_action( 'sprout_meta_box', $args, SI_Invoice::POST_TYPE );
 	}
@@ -111,8 +111,9 @@ class SI_Invoices_Recurring extends SI_Controller {
 				'fields' => self::recurring_options( $invoice ),
 				'next_time' => date_i18n( 'Y-m-d', self::get_clone_time( $post->ID ) ),
 				'invoice_id' => $invoice->get_id(),
-				'children' => self::get_child_clones( $post->ID )
-			), false );
+				'duration' => self::get_duration( $post->ID ),
+				'children' => self::get_child_clones( $post->ID ),
+		), false );
 
 	}
 
@@ -128,6 +129,9 @@ class SI_Invoices_Recurring extends SI_Controller {
 
 		$frequency_days = ( isset( $_POST['sa_recurring_invoice_custom_freq'] ) ) ? $_POST['sa_recurring_invoice_custom_freq'] : '' ;
 		self::set_frequency_custom( $post_id, $frequency_days );
+
+		$duration = ( isset( $_POST['sa_recurring_invoice_duration'] ) ) ? $_POST['sa_recurring_invoice_duration'] : 0 ;
+		self::set_duration( $post_id, $duration );
 
 		if ( isset( $_POST['sa_recurring_invoice_is_recurring'] ) && $_POST['sa_recurring_invoice_is_recurring'] ) {
 			self::set_recurring( $post_id );
@@ -151,6 +155,9 @@ class SI_Invoices_Recurring extends SI_Controller {
 		$custom_freq_meta = self::get_frequency_custom( $doc->get_id() );
 		$custom_freq = ( $custom_freq_meta ) ? $custom_freq_meta : 15 ;
 
+		$duration_meta = self::get_duration( $doc->get_id() );
+		$duration = ( $duration_meta ) ? $duration_meta : 0 ;
+
 		$is_recurring_desc = __( 'Check if this invoice should be recurring and be cloned on the frequency below.', 'sprout-invoices' );
 		$clone_time = self::get_clone_time( $doc->get_id() );
 		if ( $clone_time ) {
@@ -165,11 +172,19 @@ class SI_Invoices_Recurring extends SI_Controller {
 			'description' => $is_recurring_desc,
 		);
 
+		$fields['duration'] = array(
+			'weight' => 102,
+			'label' => __( 'Duration', 'sprout-invoices' ),
+			'type' => 'number',
+			'default' => $duration,
+			'description' => __( 'Times a new invoice should be created. 0 is unlimited.', 'sprout-invoices' ),
+		);
+
 		$fields['start_time'] = array(
 			'weight' => 105,
 			'label' => __( 'Start Date', 'sprout-invoices' ),
 			'type' => 'date',
-			'default' => date_i18n( 'Y-m-d', $start )
+			'default' => date_i18n( 'Y-m-d', $start ),
 		);
 
 		$fields['frequency'] = array(
@@ -179,7 +194,7 @@ class SI_Invoices_Recurring extends SI_Controller {
 			'options' => array(
 					'weekly' => __( 'Weekly', 'sprout-invoices' ),
 					'monthly' => __( 'Monthly', 'sprout-invoices' ),
-					//'quarterly' => __( 'Quarterly', 'sprout-invoices' ),
+					'quarterly' => __( 'Quarterly', 'sprout-invoices' ),
 					'yearly' => __( 'Yearly', 'sprout-invoices' ),
 					'custom' => __( 'Custom', 'sprout-invoices' ),
 				),
@@ -192,7 +207,7 @@ class SI_Invoices_Recurring extends SI_Controller {
 			'weight' => 110.1,
 			'label' => '',
 			'type' => 'bypass',
-			'output' => sprintf( __( 'Created Every %s Days', 'sprout-invoices' ), $day_option_input )
+			'output' => sprintf( __( 'Created Every %s Days', 'sprout-invoices' ), $day_option_input ),
 		);
 
 		$fields = apply_filters( 'si_recurring_invoice_submission_fields', $fields );
@@ -226,8 +241,8 @@ class SI_Invoices_Recurring extends SI_Controller {
 			return 0;
 		}
 		$doc->save_post_meta( array(
-				self::$meta_keys['is_recurring'] => 1,
-			) );
+			self::$meta_keys['is_recurring'] => 1,
+		) );
 		return 1;
 	}
 
@@ -237,8 +252,8 @@ class SI_Invoices_Recurring extends SI_Controller {
 			return 0;
 		}
 		$doc->save_post_meta( array(
-				self::$meta_keys['is_recurring'] => 0,
-			) );
+			self::$meta_keys['is_recurring'] => 0,
+		) );
 		return 1;
 	}
 
@@ -250,7 +265,7 @@ class SI_Invoices_Recurring extends SI_Controller {
 		if ( ! is_object( $doc ) ) {
 			return 0;
 		}
-		$time = (int)$doc->get_post_meta( self::$meta_keys['start_time'] );
+		$time = (int) $doc->get_post_meta( self::$meta_keys['start_time'] );
 		return $time;
 	}
 
@@ -260,8 +275,8 @@ class SI_Invoices_Recurring extends SI_Controller {
 			return 0;
 		}
 		$doc->save_post_meta( array(
-				self::$meta_keys['start_time'] => $start_time,
-			) );
+			self::$meta_keys['start_time'] => $start_time,
+		) );
 		return $start_time;
 	}
 
@@ -283,8 +298,8 @@ class SI_Invoices_Recurring extends SI_Controller {
 			return 0;
 		}
 		$doc->save_post_meta( array(
-				self::$meta_keys['frequency'] => $frequency,
-			) );
+			self::$meta_keys['frequency'] => $frequency,
+		) );
 		return $frequency;
 	}
 
@@ -296,7 +311,7 @@ class SI_Invoices_Recurring extends SI_Controller {
 		if ( ! is_object( $doc ) ) {
 			return 0;
 		}
-		$days = (int)$doc->get_post_meta( self::$meta_keys['frequency_custom'] );
+		$days = (int) $doc->get_post_meta( self::$meta_keys['frequency_custom'] );
 		return $days;
 	}
 
@@ -306,9 +321,32 @@ class SI_Invoices_Recurring extends SI_Controller {
 			return 0;
 		}
 		$doc->save_post_meta( array(
-				self::$meta_keys['frequency_custom'] => $days,
-			) );
+			self::$meta_keys['frequency_custom'] => $days,
+		) );
 		return $days;
+	}
+
+	/**
+	 * Total times
+	 */
+	public static function get_duration( $doc_id = 0 ) {
+		$doc = si_get_doc_object( $doc_id );
+		if ( ! is_object( $doc ) ) {
+			return 0;
+		}
+		$duration = (int) $doc->get_post_meta( self::$meta_keys['duration'] );
+		return $duration;
+	}
+
+	public static function set_duration( $doc_id = 0, $duration = 0 ) {
+		$doc = si_get_doc_object( $doc_id );
+		if ( ! is_object( $doc ) ) {
+			return 0;
+		}
+		$doc->save_post_meta( array(
+			self::$meta_keys['duration'] => (int) $duration,
+		) );
+		return $duration;
 	}
 
 
@@ -338,8 +376,8 @@ class SI_Invoices_Recurring extends SI_Controller {
 			return 0;
 		}
 		$invoice->save_post_meta( array(
-				self::$meta_keys['cloned_from'] => $parent,
-			) );
+			self::$meta_keys['cloned_from'] => $parent,
+		) );
 		return $parent;
 	}
 
@@ -354,7 +392,7 @@ class SI_Invoices_Recurring extends SI_Controller {
 		if ( ! self::is_recurring( $invoice_id ) ) {
 			return 0;
 		}
-		$time = (int)$invoice->get_post_meta( self::$meta_keys['clone_time'] );
+		$time = (int) $invoice->get_post_meta( self::$meta_keys['clone_time'] );
 		return $time;
 	}
 
@@ -380,6 +418,9 @@ class SI_Invoices_Recurring extends SI_Controller {
 			case 'monthly':
 				$clone_time = strtotime( '+1 Month', $start_time );
 				break;
+			case 'quarterly':
+				$clone_time = strtotime( '+3 Month', $start_time );
+				break;
 			case 'yearly':
 				$clone_time = strtotime( '+1 Year', $start_time );
 				break;
@@ -394,8 +435,8 @@ class SI_Invoices_Recurring extends SI_Controller {
 		}
 
 		$invoice->save_post_meta( array(
-				self::$meta_keys['clone_time'] => $clone_time,
-			) );
+			self::$meta_keys['clone_time'] => $clone_time,
+		) );
 		return $clone_time;
 	}
 
@@ -414,19 +455,19 @@ class SI_Invoices_Recurring extends SI_Controller {
 				array(
 					'key' => self::$meta_keys['is_recurring'],
 					'value' => 1,
-					'compare' => '='
+					'compare' => '=',
 					),
 				array(
 					'key' => self::$meta_keys['clone_time'],
 					'value' => array(
 							strtotime( 'Last year' ),
-							current_time( 'timestamp' )
+							current_time( 'timestamp' ),
 							),
-					'compare' => 'BETWEEN'
+					'compare' => 'BETWEEN',
 					),
 				array(
 					'key' => self::$meta_keys['cloned_from'],
-					'compare' => 'NOT EXISTS'
+					'compare' => 'NOT EXISTS',
 					)
 				),
 		);
@@ -434,6 +475,15 @@ class SI_Invoices_Recurring extends SI_Controller {
 		$invoice_ids = get_posts( $args );
 
 		foreach ( $invoice_ids as $invoice_id ) {
+			$duration = self::get_duration( $invoice_id );
+			if ( 0 !== $duration ) {
+				$duration_clones = count( self::get_child_clones( $invoice_id ) );
+				if ( $duration_clones >= $duration ) {
+					self::set_as_not_recurring( $invoice_id );
+					continue;
+				}
+			}
+
 			$cloned_post_id = self::clone_post( $invoice_id, SI_Invoice::STATUS_PENDING, SI_Invoice::POST_TYPE );
 
 			// Issue date is today.
@@ -511,5 +561,4 @@ class SI_Invoices_Recurring extends SI_Controller {
 	public static function addons_view_path() {
 		return SA_ADDON_RECURRING_INVOICES_PATH . '/views/';
 	}
-
 }

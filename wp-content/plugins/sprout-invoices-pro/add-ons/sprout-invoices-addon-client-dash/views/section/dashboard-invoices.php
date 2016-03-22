@@ -14,7 +14,11 @@
 			foreach ( $invoices as $invoice_id ) :
 				$invoice = SI_Invoice::get_instance( $invoice_id );
 
-				if ( ! is_a( $invoice, 'SI_Invoice' ) ){
+				if ( ! is_a( $invoice, 'SI_Invoice' ) ) {
+					continue;
+				}
+ 
+				if ( 'archived' === si_get_invoice_status( $invoice_id ) ) {
 					continue;
 				}
 
@@ -43,7 +47,7 @@
 						$label = 'default';
 						break;
 				} ?>
-				<tr class="status_<?php echo esc_attr( $label ); ?> <?php if ( isset($_GET['id']) && $invoice_id === $_GET['id'] ) { echo 'highlight'; } ?>">
+				<tr class="status_<?php echo esc_attr( $label ); ?> <?php if ( isset( $_GET['id'] ) && $invoice_id === $_GET['id'] ) { echo 'highlight'; } ?>">
 					<td>
 						<small><time datetime="<?php si_invoice_issue_date( $invoice_id ) ?>"><?php echo date_i18n( apply_filters( 'si_client_dash_date_format', 'M. jS' ), si_get_invoice_issue_date( $invoice_id ) ) ?></time></small>
 					</td>

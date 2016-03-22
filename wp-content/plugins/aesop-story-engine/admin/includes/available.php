@@ -164,13 +164,13 @@ if ( ! function_exists( 'aesop_shortcodes' ) ) {
 						'type'  => 'select',
 						'values'  => array(
 							array(
+								'value' => 'block',
+								'name' => __( 'Full Width', 'aesop-core' ),
+							),
+							array(
 								'value' => 'pull',
 								'name' => __( 'Pull Quote', 'aesop-core' ),
 							),
-							array(
-								'value' => 'block',
-								'name' => __( 'Full Width', 'aesop-core' ),
-							)
 						),
 						'default'  => 'block',
 						'desc'   => __( 'Quote Styles', 'aesop-core' ),
@@ -180,7 +180,7 @@ if ( ! function_exists( 'aesop_shortcodes' ) ) {
 						'type'  => 'color',
 						'default'  => '#282828',
 						'desc'   => __( 'Background Color', 'aesop-core' ),
-						'tip'  => __( 'Select a background color to be used as the quote background.', 'aesop-core' )
+						'tip'  => __( 'Select a background color to be used as the quote background. Used only for full width quotes', 'aesop-core' )
 					),
 					'text'    => array(
 						'type'  => 'color',

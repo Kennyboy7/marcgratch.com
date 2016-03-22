@@ -12,7 +12,7 @@
 	 */
 	si.timeEntries.save = function( data, $save_button ) {
 		data.action = 'sa_save_time';
-		$save_button.after(si.timeEntries.config.inline_spinner);
+		$save_button.after(si_js_object.inline_spinner);
 		$.post( si_js_object.ajax_url, data,
 			function( response ) {
 				if ( response.error ) {

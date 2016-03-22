@@ -1,0 +1,7 @@
+= 3.0.1 =
+
+* Fix: Javascript error on some admin pages
+
+= 3.0 =
+
+* 8.0 Compatibility

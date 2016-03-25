@@ -1,22 +1,66 @@
 .item.item_type_task strong.title {
-    color: #fff;
+    color: #333;
     padding: 5px;
     overflow: hidden;
     width: 100%;
     display: block;
     margin: -5px 0 0;
+    background-color: #fff;
+    border-color: #ccc;
 }
 
 .item.item_type_task .bug strong.title {
-    background: #d9534f;
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
 }
 
 .item.item_type_task .new-feature strong.title {
-    background: #5cb85c;
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.item.item_type_task .task strong.title {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
 }
 
 .item.item_type_task .improvement strong.title {
-    background: #5bc0de;
+    color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+
+.item.item_type_task .maintenance strong.title {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+
+.item.item_type_task .release strong.title {
+    color: #fff;
+    background-color: #ac92ec;
+    border-color: #967adc;
+}
+
+.item.item_type_task .question strong.title {
+    color: #fff;
+    background-color: #ec87c0;
+    border-color: #d770ad;
+}
+
+.item.item_type_task .research strong.title {
+    color: #fff;
+    background-color: #48cfad;
+    border-color: #37bc9b;
+}
+
+.item.item_type_task .meeting strong.title {
+    color: #fff;
+    background-color: #ffce54;
+    border-color: #f6bb42;
 }
 
 #logo img {

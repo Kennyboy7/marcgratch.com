@@ -168,7 +168,9 @@
             $.when( self.response ).done(function( response ){
                 var url = window.location.toString();
                 var query_string = url.split("?");
-                var params = query_string[1].split("&");
+                if ('undefined' !== typeof query_string[1]) {
+                    var params = query_string[1].split("&");
+                }
                 var param_list = {};
 
                 self.response = JSON.parse(response);
@@ -178,14 +180,14 @@
                 self.updateEstimates( self.response.estimates )
                 self.updateInvoices( self.response.invoices )
 
-                $.each(params, function(){
-                    var param_item = this.split("=");
-                    if (param_item.indexOf("parent_task") > -1 && 'undefined' !== typeof param_item[1] && 'parent_task' === param_item[0]){
-                        param_list[param_item[0]] = param_item[1];
-                    }
-                });
-
-                console.log(param_list['parent_task']);
+                if ('undefined' !== typeof params) {
+                    $.each(params, function () {
+                        var param_item = this.split("=");
+                        if (param_item.indexOf("parent_task") > -1 && 'undefined' !== typeof param_item[1] && 'parent_task' === param_item[0]) {
+                            param_list[param_item[0]] = param_item[1];
+                        }
+                    });
+                }
 
                 if ('undefined' !== typeof param_list['parent_task']){
                     $('select#input_5_18')

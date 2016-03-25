@@ -116,11 +116,7 @@ function populate_pods_dropdown( $form ) {
 			//Adding post titles to the items array
 			foreach ( $field_options as $option ) {
 
-				$slug = utf8_encode($option);
-				$slug = str_replace(' ', '-', $slug);
-				$slug = preg_replace('/[^\da-z]/i', '', $slug);
-				$slug = sprintf('%s', $slug);
-				$slug = urlencode($slug);
+				$slug = sanitize_title($option);
 
 				$items[] = array( 'value' => $slug, 'text' => $option );
 			}
@@ -141,11 +137,7 @@ function populate_pods_dropdown( $form ) {
 			//Adding post titles to the items array
 			foreach ( $field_options as $option ) {
 
-				$slug = utf8_encode($option);
-				$slug = str_replace(' ', '-', $slug);
-				$slug = preg_replace('/[^\da-z]/i', '', $slug);
-				$slug = sprintf('%s', $slug);
-				$slug = urlencode($slug);
+				$slug = sanitize_title($option);
 
 				$items[] = array( 'value' => $slug, 'text' => $option );
 			}
@@ -443,11 +435,30 @@ function set_post_content( $post_id, $entry, $form ) {
 	$fix_version = explode(',',$fix_version);
 
 	$status = wp_set_object_terms( $post_id, $fix_version, 'fixversion', true );
+	
+	$priority_choices = $form['fields'][3];
+	$priority_choices = $priority_choices->choices;
+	foreach ($priority_choices as $choice){
+		if ($choice['value'] == $entry[4]){
+			$priority_choice = $choice['text'];
+			break;
+		}
+	}
+	$priority_choice_text = isset($priority_choice) ? $priority_choice : $entry[4];
 
+	$issue_type_choices = $form['fields'][2];
+	$issue_type_choices = $issue_type_choices->choices;
+	foreach ($issue_type_choices as $choice){
+		if ($choice['value'] == $entry[3]){
+			$issue_type_choice = $choice['text'];
+			break;
+		}
+	}
+	$issue_type_choice_text = isset($issue_type_choice) ? $issue_type_choice : $entry[3];
 	$data = array(
 			'project' => $entry[2],
-			'issue_type' => $entry[3],
-			'priority' => $entry[4],
+			'issue_type' => $issue_type_choice_text,
+			'priority' => $priority_choice_text,
 			'description' => $entry[5],
 			'fix_version' => $status,
 			'attachments' => $attachment_array,

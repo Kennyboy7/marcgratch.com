@@ -71,10 +71,12 @@
     display: none;
 }
 
+#invoice p.title,
 #estimate p.title {
     width: 75%;
 }
 
+#invoice .header_info,
 #estimate .header_info {
     width: 60%;
 }

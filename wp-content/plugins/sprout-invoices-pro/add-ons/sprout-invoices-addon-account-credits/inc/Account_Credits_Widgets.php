@@ -24,6 +24,10 @@ class SI_Account_Credits_Widgets extends SI_Account_Credits {
 
 	public static function add_dashboard_widgets( $context = 'dashboard' ) {
 
+		if ( ! current_user_can( 'edit_sprout_invoices' ) ) {
+			return;
+		}
+
 		add_meta_box(
 			'credit_tracker',
 			__( 'Credit Tracker', 'sprout-invoices' ),
@@ -42,6 +46,6 @@ class SI_Account_Credits_Widgets extends SI_Account_Credits {
 		}
 		self::load_addon_view( 'admin/dashboards/credit-tracker', array(
 				'fields' => $fields,
-			), true );
+		), true );
 	}
 }

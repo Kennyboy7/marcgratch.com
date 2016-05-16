@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Time_Tracking_Toggl Controller
+ * Woo_Integration Controller
  *
- * @package Sprout_Invoice
- * @subpackage Time_Tracking_Toggl
+ * @package Woo_Integration
  */
-class Woo_Integration extends SI_Controller {
+class Woo_Integration {
 	const ORDER_ID_META = '_si_woocommerce_order';
 
 	public static function init() {
@@ -37,5 +36,4 @@ class Woo_Integration extends SI_Controller {
 				break;
 		}
 	}
-
 }

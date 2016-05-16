@@ -64,7 +64,7 @@ class Predefined_Items extends SI_Controller {
 		self::load_addon_view( 'admin/meta-boxes/invoices/add-task-or-product.php', array(
 				'types' => $types,
 				'items' => $items,
-			), false );
+		), false );
 	}
 
 
@@ -118,7 +118,7 @@ class Predefined_Items extends SI_Controller {
 
 		$fields['sku'] = array(
 			'weight' => 25,
-			'label' => __( 'Default SKU (if product)', 'sprout-invoices'  ),
+			'label' => __( 'Default SKU (if product)', 'sprout-invoices' ),
 			'type' => 'text',
 			'placeholder' => '',
 		);
@@ -273,7 +273,7 @@ class Predefined_Items extends SI_Controller {
 				'type' => $item->get_type(),
 				'desc' => $item->get_content(),
 				'rate' => $item->get_default_rate(),
-				'qty' => $item->get_default_qty(),
+				'qty' => ( $item->get_default_qty() ) ? $item->get_default_qty() : 1,
 				'tax' => $item->get_default_percentage(),
 				'sku' => $item->get_default_sku(),
 				'title' => $item->get_title(),
@@ -321,7 +321,7 @@ class Predefined_Items extends SI_Controller {
 		$items = self::get_items_and_products();
 		self::load_addon_view( 'admin/sections/items-admin', array(
 				'items' => $items,
-			), false );
+		), false );
 		exit();
 	}
 
@@ -334,7 +334,7 @@ class Predefined_Items extends SI_Controller {
 		$fields = self::item_creation_fields();
 		self::load_addon_view( 'admin/sections/items-creation-form', array(
 				'fields' => $fields,
-			), false );
+		), false );
 		exit();
 	}
 
@@ -374,7 +374,7 @@ class Predefined_Items extends SI_Controller {
 		$fields['id']['value'] = $item_id;
 		self::load_addon_view( 'admin/sections/items-edit-form', array(
 				'fields' => $fields,
-			), false );
+		), false );
 		exit();
 	}
 
@@ -387,7 +387,7 @@ class Predefined_Items extends SI_Controller {
 		self::load_addon_view( 'admin/meta-boxes/invoices/add-task-or-product.php', array(
 				'types' => $types,
 				'items' => $items,
-			), false );
+		), false );
 		exit();
 	}
 
@@ -432,5 +432,4 @@ class Predefined_Items extends SI_Controller {
 	public static function addons_view_path() {
 		return SA_ADDON_PREDEFINED_ITEMS_PATH . '/views/';
 	}
-
 }

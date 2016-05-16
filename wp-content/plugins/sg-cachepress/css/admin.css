@@ -5,9 +5,9 @@ p { display: block; }
 h3 { margin: 0 0 10px; }
 .m0 { margin: 0 !important; }
 .clr { clear: both; display: block; height: 0; line-height: 0; font-size: 0; }
-.clear:before, .clear:after { content: ""; display: table; }
-.clear:after { clear: both;}
-.clear { zoom: 1; }
+.sgclr:before, .sgclr:after { content: ""; display: table; }
+.sgclr:after { clear: both;}
+.sgclr { zoom: 1; }
 .error, .notcached { color: red; text-align: center;}
 .sgwrap p.error { border: none !important;}
 .cached { color: green; font-weight:700 }

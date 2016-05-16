@@ -331,7 +331,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 
 		$nvpData = apply_filters( 'si_paypal_ec_set_nvp_data', $nvpData );
 		do_action( 'si_log', __CLASS__ . '::' . __FUNCTION__ . ' - PayPal EC SetCheckout Data', $nvpData );
-		return apply_filters( 'si_set_nvp_data', $nvpData, $checkout, $i );
+		return apply_filters( 'si_set_nvp_data', $nvpData, $checkout );
 	}
 
 	public static function payment_request_line_items( SI_Invoice $invoice ) {
@@ -552,7 +552,7 @@ class SI_Paypal_EC extends SI_Offsite_Processors {
 
 		$nvpData += self::payment_request_line_items( $invoice );
 
-		$nvpData = apply_filters( 'si_paypal_ec_nvp_data', $nvpData, $checkout, $i, $invoice );
+		$nvpData = apply_filters( 'si_paypal_ec_nvp_data', $nvpData, $checkout, $invoice );
 
 		return $nvpData;
 	}

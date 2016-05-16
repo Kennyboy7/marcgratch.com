@@ -46,11 +46,10 @@ class SI_Client_Dashboard extends SI_Controller {
 
 		$user_id = 0;
 		$valid_client_ids = self::validate_token();
-		if ( isset( $_GET[self::USER_QUERY_ARG] ) && $valid_client_ids ) {
-			$user_id = (int) $_GET[self::USER_QUERY_ARG];
+		if ( isset( $_GET[ self::USER_QUERY_ARG ] ) && $valid_client_ids ) {
+			$user_id = (int) $_GET[ self::USER_QUERY_ARG ];
 			$client_ids = $valid_client_ids;
-		}
-		elseif ( is_user_logged_in() ) {
+		} elseif ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
 		}
 
@@ -73,8 +72,7 @@ class SI_Client_Dashboard extends SI_Controller {
 	}
 
 	public static function login_form() {
-		return self::load_addon_view_to_string( 'section/login-form', array(
-				), true );
+		return self::load_addon_view_to_string( 'section/login-form', array(), true );
 	}
 
 	public static function dashboard_view( $client_id, $atts = array() ) {
@@ -102,7 +100,7 @@ class SI_Client_Dashboard extends SI_Controller {
 			'estimates' => $client->get_estimates(),
 			'show_estimates' => $show_estimates,
 			'show_invoices' => $show_invoices,
-			), true );
+		), true );
 	}
 
 	public static function blank_dashboard_view() {
@@ -154,23 +152,23 @@ class SI_Client_Dashboard extends SI_Controller {
 		$now = time();
 		$token = md5( wp_json_encode( $client ).$now );
 		$client->save_post_meta( array(
-				self::CLIENT_TOKEN_META => $token,
-				self::CLIENT_TOKEN_META.'_time' => $now, // future use for timeout
-			) );
+			self::CLIENT_TOKEN_META => $token,
+			self::CLIENT_TOKEN_META.'_time' => $now, // future use for timeout
+		) );
 		return $token;
 	}
 
 	public static function validate_token() {
 		$user_id = 0;
-		if ( ! isset( $_REQUEST[self::USER_QUERY_ARG] ) || $_REQUEST[self::USER_QUERY_ARG] == '' ) {
+		if ( ! isset( $_REQUEST[ self::USER_QUERY_ARG ] ) || $_REQUEST[ self::USER_QUERY_ARG ] == '' ) {
 			return false;
 		}
-		if ( ! isset( $_REQUEST[self::CLIENT_TOKEN_QUERY_ARG] ) || $_REQUEST[self::CLIENT_TOKEN_QUERY_ARG] == '' ) {
+		if ( ! isset( $_REQUEST[ self::CLIENT_TOKEN_QUERY_ARG ] ) || $_REQUEST[ self::CLIENT_TOKEN_QUERY_ARG ] == '' ) {
 			return false;
 		}
 
-		$user_id = $_REQUEST[self::USER_QUERY_ARG];
-		$token = $_REQUEST[self::CLIENT_TOKEN_QUERY_ARG];
+		$user_id = $_REQUEST[ self::USER_QUERY_ARG ];
+		$token = $_REQUEST[ self::CLIENT_TOKEN_QUERY_ARG ];
 
 		// Search for client with token.
 		$clients = SI_Post_Type::find_by_meta( SI_Client::POST_TYPE, array( self::CLIENT_TOKEN_META => $token ) );
@@ -238,13 +236,12 @@ class SI_Client_Dashboard extends SI_Controller {
 		$args = array(
 			'post_type' => 'page',
 			'fields' => 'ids',
-			's' => '['.self::SHORTCODE.']'
+			's' => '['.self::SHORTCODE.']',
 			);
 		$pages = get_posts( $args );
 		if ( ! empty( $pages ) ) {
 			$page_id = $pages[0];
-		}
-		else {
+		} else {
 			$page_id = wp_insert_post( array(
 				'post_status' => 'publish',
 				'post_type' => 'page',
@@ -273,5 +270,4 @@ class SI_Client_Dashboard extends SI_Controller {
 	public static function addons_view_path() {
 		return SA_ADDON_CLIENT_DASH_PATH . '/views/';
 	}
-
 }

@@ -1,3 +1,22 @@
+### 3.2.5: May 6th, 2016
+* Fixes "undefined index" notices when Facebook and/or Twitter have been disabled in settings.
+* Fixes a bug when writing 4xx redirects into the .htaccess file on Apache.
+* Includes every change in Yoast SEO core 3.2.5, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 3.2.2: April 21th, 2016
+* Fixes a bug where notification for a deleted post wasn't shown.
+* Includes every change in Yoast SEO core 3.2.3, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 3.2.0: April 20th, 2016
+* Introduces social previews, you can now see what your posts will look like when they are shared on Facebook and Twitter.
+  * The previews will automatically show you when your image is too small.
+  * You can use all replace variables you are used to in the Facebook and Twitter previews.
+* Removes the tutorial video page, the videos are now available on every tab.
+* Fixes a bug where Yoast SEO Premium would fatal when activating while Yoast SEO was active.
+* Fixes a bug where the home URL wasn't correctly stripped from the redirect old URL.
+* Fixes a bug where clicking the 'Update now' button on the plugin page didn't update correctly.
+* Includes every change in Yoast SEO core 3.2.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
 ### 3.1.3: March 23rd, 2016
 * Fixes a few bugs related to term slugs that were altered by our plugin after they were saved. This especially caused issues for terms with parents. We will simply not touch term slugs anymore until the way terms are saved is fixed in WordPress, see also https://core.trac.wordpress.org/ticket/22293.
 * Fixes a bug where we would create redirects if nav menu items were edited.
@@ -14,7 +33,7 @@
 * Fixes a bug where PHP redirects were broken.
 * Fixes a bug where users could (temporarily) lose their redirects if our upgrade routine would for some reason not be triggered while updating to versions greater than 3.0.7
 * Fixes a bug where slashes were shown in the redirect manager for a redirect without a target url (ie. 410)
-* Fixes a Fatal error that occured when switching from Free to Premium.
+* Fixes a Fatal error that occurred when switching from Free to Premium.
 
 ### 3.1: March 1st, 2016
 * Made PHP redirects faster and more efficient.
@@ -199,7 +218,7 @@
 * The possibility to add a redirect is offered when a post is deleted.
 * A redirect is automatically added when a category/term slug change.
 * The possibility to add a redirect is offered when a category/term is deleted.
-* Added support to redirect URL's with special characters.
+* Added support to redirect URLs with special characters.
 * Response code of redirects is now checked while adding redirects to avoid incorrect redirects.
 * Created a Yoast overlay for a more user friendly way of displaying errors.
 * Implemented autoloader to enhance plugin performance.

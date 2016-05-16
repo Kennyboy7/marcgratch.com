@@ -4,14 +4,14 @@ Plugin Name: Sprout Invoices Add-on - Client Summary Notification
 Plugin URI: https://sproutapps.co/marketplace/
 Description: Sends Invoice/Estimate Summary to the Client
 Author: Sprout Apps
-Version: 1.0
+Version: 1.0.1
 Author URI: https://sproutapps.co
 */
 
 /**
  * Plugin Info for updates
  */
-define( 'SA_ADDON_CLIENT_SUMMARY_NOTIFICATION_VERSION', '1.0' );
+define( 'SA_ADDON_CLIENT_SUMMARY_NOTIFICATION_VERSION', '1.0.1' );
 define( 'SA_ADDON_CLIENT_SUMMARY_NOTIFICATION_DOWNLOAD_ID', 1111 );
 define( 'SA_ADDON_CLIENT_SUMMARY_NOTIFICATION_FILE', __FILE__ );
 define( 'SA_ADDON_CLIENT_SUMMARY_NOTIFICATION_PATH', dirname( __FILE__ ) );

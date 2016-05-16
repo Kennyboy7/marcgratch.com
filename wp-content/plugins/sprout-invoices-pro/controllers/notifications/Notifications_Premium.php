@@ -135,13 +135,19 @@ class SI_Notifications_Premium extends SI_Notifications_Control {
 	 */
 	public static function maybe_send_invoice_payment_reminder() {
 		$option_key = 'last_overdue_invoices_notification_sent_timestamp';
-		$last_check = get_option( $option_key, 0 );
-		$delay = apply_filters( 'si_get_overdue_payment_reminder_delay', current_time( 'timestamp' ) - 60 * 60 * 24 );
-		if ( $last_check > $delay ) {
+		$last_send = get_option( $option_key, 0 );
+
+		// Send once per day
+		if ( $last_send > strtotime( 'Today',  current_time( 'timestamp' ) ) ) {
 			return;
 		}
-		$recently_overdue = SI_Invoice::get_overdue_invoices( $last_check, $delay );
-		if ( empty( $recently_overdue ) ) { // no overdue invoices.
+
+		$after = apply_filters( 'si_get_overdue_payments_after_for_reminders', strtotime( 'Yesterday',  current_time( 'timestamp' ) ) );
+
+		$recently_overdue = SI_Invoice::get_overdue_invoices( $after );
+
+		// no overdue invoices.
+		if ( empty( $recently_overdue ) ) {
 			update_option( $option_key, current_time( 'timestamp' ) );
 			return;
 		}

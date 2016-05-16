@@ -163,8 +163,8 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 				'save_callback' => array( __CLASS__, 'save_meta_box_time_tracking' ),
 				'context' => 'normal',
 				'priority' => 'high',
-				'save_priority' => 0
-			)
+				'save_priority' => 0,
+			),
 		);
 		do_action( 'sprout_meta_box', $args, SI_Project::POST_TYPE );
 	}
@@ -184,15 +184,15 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 		$times = $project->get_associated_times();
 		self::load_addon_view( 'admin/meta-boxes/projects/time-entries', array(
 				'times' => $times,
-				'project_id' => $project->get_id()
-			), true );
+				'project_id' => $project->get_id(),
+		), true );
 
 		// Form
 		$fields = self::time_entry_fields( $post->ID, true );
 		self::load_addon_view( 'admin/sections/time-tracker', array(
 				'fields' => $fields,
-				'project_id' => $project->get_id()
-			), true );
+				'project_id' => $project->get_id(),
+		), true );
 	}
 
 	public static function save_meta_box_time_tracking() {
@@ -215,7 +215,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 				'invoice' => $invoice,
 				'project_id' => $project_id,
 				'client_id' => $client_id,
-			), true );
+		), true );
 	}
 
 	/**
@@ -235,11 +235,11 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 		$mark_time_billed = array();
 		$line_items = $invoice->get_line_items();
 		foreach ( $_POST['line_item_key'] as $key => $order ) {
-			if ( isset( $_POST['line_item_desc'][$key] ) && $_POST['line_item_desc'][$key] != '' ) {
-				if ( isset( $line_items[$order] ) ) {
-					$line_items[$order]['time_id'] = ( isset( $_POST['line_item_time_id'][$key] ) && $_POST['line_item_time_id'][$key] != '' ) ? $_POST['line_item_time_id'][$key] : 0;
-					if ( $line_items[$order]['time_id'] ) {
-						$mark_time_billed[] = $line_items[$order]['time_id'];
+			if ( isset( $_POST['line_item_desc'][ $key ] ) && $_POST['line_item_desc'][ $key ] != '' ) {
+				if ( isset( $line_items[ $order ] ) ) {
+					$line_items[ $order ]['time_id'] = ( isset( $_POST['line_item_time_id'][ $key ] ) && $_POST['line_item_time_id'][ $key ] != '' ) ? $_POST['line_item_time_id'][ $key ] : 0;
+					if ( $line_items[ $order ]['time_id'] ) {
+						$mark_time_billed[] = $line_items[ $order ]['time_id'];
 					}
 				}
 			}
@@ -266,7 +266,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 			'id'    => 'si_time_tracker',
 			'title' => '<span class="dashicons dashicons-clock ab-icon"></span>',
 			'href'	=> '#time_tracker',
-			'meta'  => array( 'class' => 'time_tracker_popup' )
+			'meta'  => array( 'class' => 'time_tracker_popup' ),
 		);
 		$wp_admin_bar->add_node( $args );
 
@@ -321,7 +321,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 	// Form //
 	///////////
 
-	public static function time_entry_fields( $context = 0, $hide_project_select = false  ) {
+	public static function time_entry_fields( $context = 0, $hide_project_select = false ) {
 		$projects = array();
 		$time_types = array();
 		if ( ! $context ) {
@@ -355,7 +355,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 					'post_type' => SI_Project::POST_TYPE,
 					'post_status' => 'any',
 					'posts_per_page' => -1,
-					'fields' => 'ids'
+					'fields' => 'ids',
 				);
 				$projects = get_posts( $args );
 				break;
@@ -391,7 +391,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 			'weight' => 20,
 			'label' => __( 'Time', 'sprout-invoices' ),
 			'type' => 'text',
-			'description' => __( 'In hours, e.g. 1.25 for 75 minutes.', 'sprout-invoices' )
+			'description' => __( 'In hours, e.g. 1.25 for 75 minutes.', 'sprout-invoices' ),
 		);
 
 		$fields['note'] = array(
@@ -657,10 +657,10 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 					'note' => apply_filters( 'the_content', $time->get_title() ),
 					'qty' => si_get_number_format( (float) $data['time_val'] ),
 					'description' => apply_filters( 'si_project_time_imported_description', $description ),
-					'activity_id' => ( is_a( $activity, 'SI_Time' ) ) ? $activity->get_id() : false ,
-					'activity' => ( is_a( $activity, 'SI_Time' ) ) ? $activity->get_title() : '' ,
-					'activity_rate' => ( is_a( $activity, 'SI_Time' ) ) ? $activity->get_default_rate() : 0 ,
-					'activity_tax' => ( is_a( $activity, 'SI_Time' ) ) ? $activity->get_default_percentage() : 0 ,
+					'activity_id' => ( is_a( $activity, 'SI_Time' ) ) ? $activity->get_id() : false,
+					'activity' => ( is_a( $activity, 'SI_Time' ) ) ? $activity->get_title() : '',
+					'activity_rate' => ( is_a( $activity, 'SI_Time' ) ) ? $activity->get_default_rate() : 0,
+					'activity_tax' => ( is_a( $activity, 'SI_Time' ) ) ? $activity->get_default_percentage() : 0,
 					);
 			}
 		}
@@ -701,7 +701,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 		$time_types = get_posts( $args );
 		self::load_addon_view( 'admin/sections/time-admin', array(
 				'time' => $time_types,
-			), true );
+		), true );
 		exit();
 	}
 
@@ -714,7 +714,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 		$fields = self::time_creation_fields();
 		self::load_addon_view( 'admin/sections/time-creation-form', array(
 				'fields' => $fields,
-			), true );
+		), true );
 		exit();
 	}
 
@@ -735,7 +735,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 		$fields = self::time_entry_fields( $project_id );
 		self::load_addon_view( 'admin/sections/time-tracker', array(
 				'fields' => $fields,
-			), true );
+		), true );
 		exit();
 	}
 
@@ -769,7 +769,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 
 		self::load_addon_view( 'public/time-tracker', array(
 				'fields' => $fields,
-			), true );
+		), true );
 		exit();
 	}
 
@@ -795,8 +795,8 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 		$times = $project->get_associated_times();
 		self::load_addon_view( 'admin/meta-boxes/projects/time-entries', array(
 				'times' => $times,
-				'project_id' => $project->get_id()
-			), true );
+				'project_id' => $project->get_id(),
+		), true );
 		exit();
 	}
 
@@ -906,7 +906,7 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 		}
 		self::load_addon_view( 'admin/dashboards/time-tracker', array(
 				'fields' => $fields,
-			), true );
+		), true );
 	}
 
 	//////////////
@@ -943,5 +943,4 @@ class SI_Time_Tracking_Premium extends SI_Controller {
 			$wpdb->update( $wpdb->posts, $parent_update, $parent_where );
 		}
 	}
-
 }

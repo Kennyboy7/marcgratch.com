@@ -4,10 +4,10 @@
 		<p><?php _e( 'The SuperCacher is a system that allows you to use the SiteGround dynamic cache and Memcached to optimize the performance of your WordPress. In order to take advantage of the system you should have the SuperCacher enabled at your web host plus the required cache options turned on below. For more information on the different caching options refer to the <a href="http://www.siteground.com/tutorials/supercacher/" target="_blank">SuperCacher Tutorial</a>!', 'sg-cachepress' ) ?></p>
 	</div>
 
-	<div class="box clear">
+	<div class="box sgclr">
 		<h2><?php _e( 'Dynamic Cache Settings', 'sg-cachepress' ) ?></h2>
 	
-		<div class="three clear">
+		<div class="three sgclr">
 			<div class="greybox">
 				<h3><?php _e( 'Dynamic Cache', 'sg-cachepress' ) ?></h3>
 				<a href="" id="sg-cachepress-dynamic-cache-toggle" class="<?php  if ( $this->options_handler->get_option('enable_cache') ==1 ) echo 'toggleon'; else echo 'toggleoff'; ?>"></a>
@@ -57,7 +57,7 @@
 		</div>
 	</div>
 	
-	<div class="box clear">
+	<div class="box sgclr">
 		<h2><?php _e( 'Dynamic Cache Status', 'sg-cachepress' ) ?></h2>
 		<div class="greybox">
 			

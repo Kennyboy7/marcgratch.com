@@ -376,6 +376,7 @@
 				$si_tooltip = $parent.find('.si_tooltip');
 			$(this).hide();
 			$si_tooltip.show();
+			$('.select2').select2();
 			$controls.slideDown('fast');
 		});
 
@@ -482,6 +483,7 @@
 		/**
 		 * Manage users for client list
 		 */
+		$('#associated_users').select2();
 		$('#associated_users').live('change', function(e) {
 			var $data = $(this).select2('data')[0],
 				$option = $(this).find("option:selected"),

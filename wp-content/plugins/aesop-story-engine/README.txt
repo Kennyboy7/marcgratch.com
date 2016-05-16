@@ -6,7 +6,7 @@ Donate link: http://aesopstoryengine.com/donate
 Tags: aesop, story, business, education, parallax, interactive, shortcode, gallery, grid gallery, thumbnail gallery,
 Requires at least: 3.8
 Tested up to: 4.4.2
-Stable tag: 1.7.3
+Stable tag: 1.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -168,9 +168,18 @@ Full documentation can be found here: [http://aesopstoryengine.com/developers](h
 * Initial Release
 
 == Changelog ==
+= 1.7.5 =
+* FIX The video didn't show when poster frame is on and the controls are off. Fixed.
+
+= 1.7.4 =
+* NEW Added the poster frame option for the video when the source is "self"
+* NEW Added the solid color background option and the minimum height option for Chapters
+* NEW Added "force circle" option for the Character component
+* FIX Some deprecated JQuery codes are replaced thanks to Gibson Starkweather (boaf)
+* FIX Some style fixes thanks to peiche
+
 = 1.7.3 =
 * FIX - Fixed the default map ID
-* FIX - Changed the default Character style
 
 = 1.7.2 =
 * FIX - Fixed timeline compatibility with Aesop themes
@@ -181,7 +190,7 @@ Full documentation can be found here: [http://aesopstoryengine.com/developers](h
 = 1.7.0 =
 * FIX - Default color behavior for non-block quote is restored
 * FIX - Default mapbox url is set to v4
-* FIX - Fized the height for default Timeline bar
+* FIX - Fixed the height for default Timeline bar
 * FIX - Aesop Lazy Loader compatability is added to more gallery types
 * FIX - Self target video doesn't play automatically if not visible and "start play when in view" is on
 

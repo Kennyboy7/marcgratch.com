@@ -24,7 +24,8 @@ if ( ! function_exists( 'aesop_video_shortcode' ) ) {
 			'viewend'   => 'off',
 			'caption'  	=> '',
 			'vidwidth'  => '',
-			'vidheight' => ''
+			'vidheight' => '',
+			'poster_frame' =>''
 		);
 		$atts = apply_filters( 'aesop_video_defaults', shortcode_atts( $defaults, $atts ) );
 
@@ -68,6 +69,8 @@ if ( ! function_exists( 'aesop_video_shortcode' ) ) {
 
 	    	<div class="aesop-video-container aesop-video-container-<?php echo esc_attr( $unique );?> aesop-component-align-<?php echo sanitize_html_class( $atts['align'] );?> <?php echo sanitize_html_class( $atts['src'] );?>" <?php echo $widthstyle;?> >
 
+			
+			    
 				<?php
 				
 			if ( 'on' == $atts['viewstart'] && 'self' == $atts['src'] ) { 
@@ -89,6 +92,9 @@ if ( ! function_exists( 'aesop_video_shortcode' ) ) {
 								}
 							});
 							<?php } ?>
+						});
+						$('#aesop-video-<?php echo esc_attr( $unique );?>').click( function(){
+							$('#aesop-video-<?php echo esc_attr( $unique );?> mejs-poster' ).hide();
 						});
 					});
 				</script>
@@ -123,7 +129,23 @@ if ( ! function_exists( 'aesop_video_shortcode' ) ) {
 			printf( '<iframe class="instagram-embed" src="//instagram.com/p/%s/embed" width="612" height="710" frameborder="0"></iframe>', esc_attr( $atts['id'] ) );
 			break;
 		case 'self':
-			echo do_shortcode( '[video src="'.$atts['hosted'].'" loop="'.esc_attr( $loopstatus ).'" autoplay="'.esc_attr( $autoplaystatus ).'"]' );
+		    if ($atts['poster_frame']!=='') {
+				?>
+				<script>
+					jQuery(document).ready(function($){
+						$('#aesop-video-<?php echo esc_attr( $unique );?>').click( function(){
+							$('#aesop-video-<?php echo esc_attr( $unique );?> .mejs-poster' ).remove();
+							$('#aesop-video-<?php echo esc_attr( $unique );?> .mejs-playpause-button button').trigger('click');
+							$('#aesop-video-<?php echo esc_attr( $unique );?>').off('click');
+							//$('#aesop-video-<?php echo esc_attr( $unique );?>' ).hide();
+						});
+					});
+				</script>
+				<?php
+				echo do_shortcode( '[video src="'.$atts['hosted'].'" loop="'.esc_attr( $loopstatus ).'" autoplay="'.esc_attr( $autoplaystatus ).'" poster="'.$atts['poster_frame'].'"]' );
+			} else {
+			    echo do_shortcode( '[video src="'.$atts['hosted'].'" loop="'.esc_attr( $loopstatus ).'" autoplay="'.esc_attr( $autoplaystatus ).'"]' );
+			}
 		}
 ?>
 		    </div>

@@ -4,7 +4,7 @@ Donate link: https://sproutapps.co/
 Tags: invoicing, estimates, payments, web invoice, bill, paypal, invoice, pay, online payment, send invoice, bill clients, credit cards, stripe, freshbooks, harvest, wp-invoice
 Requires at least: 3.8
 Tested up to: 4.5
-Stable tag: 10.0.7
+Stable tag: 10.3
 
 == Description ==
 
@@ -22,6 +22,30 @@ The plugin should already be installed at this point. If you still need help che
 **Please visit the [FAQ at Sprout Apps](https://sproutapps.co/support/knowledgebase/sprout-invoices/faqs/).**
 
 == Changelog ==
+
+= 10.3 =
+
+* NEW: Add WooCommerce product import compatibility
+* Fix: Line item fix
+* Fix: Payment reminder refactored
+* Update: Redactor updated
+* Fix: PHP warning
+
+= 10.2 =
+
+* Fix: Dont' allow non editors to log credits.
+
+= 10.1 =
+
+* New: Project Panorama Integration
+* Fix: WooCommerce Integration Update Mechanism fix
+* Fix: UI for Recurring 
+* Update: Translations
+
+= 10.0.8 =
+
+* Fix: Selection of of users from client admin
+* Change: Free updates
 
 = 10.0.7 =
 
@@ -691,7 +715,7 @@ https://sproutapps.co/news/sprout-invoices-7-0-banners-release-party-🎉/
 * _Fix:_
 	* Few error prevention updates
 
-= 1.0.10.1 =
+= 1.0.10.3 =
 
 * _Fix_
 	* Freshbooks payment import fix. FBAPI uses an unconventional amount format (i.e. 353634.980)

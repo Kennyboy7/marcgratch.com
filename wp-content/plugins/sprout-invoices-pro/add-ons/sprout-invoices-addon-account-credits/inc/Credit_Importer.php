@@ -41,29 +41,29 @@ class SI_Account_Credits_Importer extends SI_Importer {
 						'option' => array(
 							'type' => 'file',
 							'description' => sprintf( __( 'Example CSV <a href="%s" target="_blank">here</a>. To be safe import no more than 100 credits at a time and import all of your invoices and clients and will be associated with these credits first.', 'sprout-invoices' ), SA_ADDON_ACCOUNT_CREDITS_URL . '/importers/credits-csv-example.csv' ),
-						)
+						),
 					),
 					self::PROCESS_ACTION => array(
 						'option' => array(
 							'type' => 'hidden',
 							'value' => wp_create_nonce( self::PROCESS_ACTION ),
-						)
+						),
 					),
-				)
-			)
+				),
+			),
 		);
 		do_action( 'sprout_settings', $settings, self::SETTINGS_PAGE );
 	}
 
 	public static function save_options() {
-		
+
 		if ( ! function_exists( 'wp_handle_upload' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
 		}
 
 		$upload_overrides = array( 'test_form' => false, 'mimes' => array( 'csv' => 'text/csv' ) );
-		if ( isset( $_FILES[self::FILE_OPTION] ) ) {
-			$client_csv_file = $_FILES[self::FILE_OPTION];
+		if ( isset( $_FILES[ self::FILE_OPTION ] ) ) {
+			$client_csv_file = $_FILES[ self::FILE_OPTION ];
 			$client_csv = wp_handle_upload( $client_csv_file, $upload_overrides );
 			if ( isset( $client_csv['file'] ) && $client_csv['file'] != '' ) {
 				update_option( self::FILE_OPTION, $client_csv['file'] );
@@ -77,7 +77,7 @@ class SI_Account_Credits_Importer extends SI_Importer {
 	 * @return
 	 */
 	public static function maybe_process_import() {
-		if ( isset( $_POST[self::PROCESS_ACTION] ) && wp_verify_nonce( $_POST[self::PROCESS_ACTION], self::PROCESS_ACTION ) ) {
+		if ( isset( $_POST[ self::PROCESS_ACTION ] ) && wp_verify_nonce( $_POST[ self::PROCESS_ACTION ], self::PROCESS_ACTION ) ) {
 			add_filter( 'si_show_importer_settings', '__return_false' );
 		}
 	}
@@ -118,12 +118,12 @@ class SI_Account_Credits_Importer extends SI_Importer {
 		if ( ! $csv_file ) {
 			// Completed previously
 			self::return_progress( array(
-						'authentication' => array(
-							'message' => __( 'Skipping credit import without a CSV to process...', 'sprout-invoices' ),
-							'progress' => 100,
-							'next_step' => 'complete',
-							),
-						) );
+				'authentication' => array(
+				'message' => __( 'Skipping credit import without a CSV to process...', 'sprout-invoices' ),
+				'progress' => 100,
+				'next_step' => 'complete',
+				),
+			) );
 			return;
 		}
 
@@ -142,17 +142,16 @@ class SI_Account_Credits_Importer extends SI_Importer {
 
 		// Complete
 		self::return_progress( array(
-				'authentication' => array(
-					'message' => sprintf( __( 'Successfully imported %s credits...', 'sprout-invoices' ), $total_records ),
-					'progress' => 100,
-					'next_step' => 'complete',
-					),
-				) );
+			'authentication' => array(
+			'message' => sprintf( __( 'Successfully imported %s credits...', 'sprout-invoices' ), $total_records ),
+			'progress' => 100,
+			'next_step' => 'complete',
+			),
+		) );
 
 	}
 
 	public static function create_credit( $credit_args = array() ) {
-		error_log( 'args: ' . print_r( $credit_args, TRUE ) );
 		$client_id = 0;
 		if ( isset( $credit_args['client_id'] ) ) {
 			$client_id = $credit_args['client_id'];
@@ -192,7 +191,6 @@ class SI_Account_Credits_Importer extends SI_Importer {
 			'user_id' => get_current_user_id(),
 		);
 		$data = wp_parse_args( $args, $defaults );
-		error_log( 'creduit data: ' . print_r( $data, TRUE ) );
 		$new_credit_id = SI_Account_Credits_Clients::create_associated_credit( $client_id, $data );
 		do_action( 'si_credit_created', $new_credit_id );
 
@@ -220,7 +218,7 @@ class SI_Account_Credits_Importer extends SI_Importer {
 
 
 	protected static function csv_to_array( $filename = '', $delimiter = ',', $fieldnames = '' ) {
-		if ( ! file_exists( $filename ) || ! is_readable( $filename ) ){
+		if ( ! file_exists( $filename ) || ! is_readable( $filename ) ) {
 			return false;
 		}
 		if ( strlen( $fieldnames ) > 0 ) {
@@ -232,13 +230,11 @@ class SI_Account_Credits_Importer extends SI_Importer {
 		if ( ( $handle = fopen( $filename, 'r' ) ) !== false ) {
 			while ( ( $row = fgetcsv( $handle, 1000, $delimiter ) ) !== false ) {
 				if ( ! $header ) {
-					$header = $row; }
-				else {
+					$header = $row; } else {
 					$data[] = array_combine( $header, $row ); }
 			}
 			fclose( $handle );
 		}
 		return $data;
 	}
-
 }

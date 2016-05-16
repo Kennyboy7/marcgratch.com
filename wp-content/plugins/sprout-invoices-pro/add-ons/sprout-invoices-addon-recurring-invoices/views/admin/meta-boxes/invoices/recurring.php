@@ -1,9 +1,9 @@
-<?php if ( empty( $children ) || $duration > count( $children ) ) : ?>
+<?php if ( ! empty( $children ) && $duration >= count( $children ) ) : ?>
+	<p><?php _e( 'No options available, since all recurring invoices have been generated.', 'sprout-invoices' ) ?></p>
+<?php else : ?>
 	<div id="recurring_invoice_options_wrap" class="admin_fields clearfix">
 		<?php sa_admin_fields( $fields, 'recurring_invoice' ); ?>
 	</div>	
-<?php else : ?>
-	<p><?php _e( 'No options available, since all recurring invoices have been generated.', 'sprout-invoices' ) ?></p>
 <?php endif ?>
 
 

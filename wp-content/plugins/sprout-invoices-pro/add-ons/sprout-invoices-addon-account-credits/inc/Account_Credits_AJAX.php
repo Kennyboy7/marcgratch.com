@@ -357,7 +357,6 @@ class SI_Account_Credits_AJAX extends SI_Account_Credits {
 		if ( empty( $credit_data ) ) {
 			wp_send_json_error( array( 'message' => 'Nothing to import' ) );
 		}
-		error_log( 'data: ' . print_r( $credit_data, true ) );
 		wp_send_json_success( $credit_data );
 
 	}

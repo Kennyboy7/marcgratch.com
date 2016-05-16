@@ -59,7 +59,6 @@ class SI_Summary_Notification extends SI_Notifications {
 	}
 
 	public static function shortcode_invoice_summary( $atts, $content, $code, $data ) {
-		error_log( 'data: ' . print_r( $data, true ) );
 		if ( ! isset( $data['records']['invoices'] ) ) {
 			return '';
 		}
@@ -77,7 +76,6 @@ class SI_Summary_Notification extends SI_Notifications {
 	}
 
 	public static function shortcode_estimate_summary( $atts, $content, $code, $data ) {
-		error_log( 'data: ' . print_r( $data, true ) );
 		if ( ! isset( $data['records']['estimates'] ) ) {
 			return '';
 		}

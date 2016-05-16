@@ -196,7 +196,7 @@ class WC_Gateway_Sprout_Invoices extends WC_Payment_Gateway {
 					'company_name' => ( '' !== $order->billing_company ) ? $order->billing_company : $order->billing_first_name . ' ' . $order->billing_last_name,
 					'website' => '',
 					'address' => $address,
-					'user_id' => $order->get_user_id()
+					'user_id' => $order->get_user_id(),
 				);
 				$client_id = SI_Client::new_client( $args );
 			}
@@ -234,7 +234,7 @@ class WC_Gateway_Sprout_Invoices extends WC_Payment_Gateway {
 		// Return thankyou redirect
 		return array(
 			'result' 	=> 'success',
-			'redirect'	=> $this->get_return_url( $order )
+			'redirect'	=> $this->get_return_url( $order ),
 		);
 	}
 
